@@ -6,6 +6,7 @@
 - talk about keeping same gitignore file in every branch
 - add everyone to this repo
 - talk about changelog file
+- encourage people to create branches for each feature, then merge into dev branch
 
 
 
