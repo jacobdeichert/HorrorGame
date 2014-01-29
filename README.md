@@ -3,7 +3,8 @@
 
 ## todo
 - add section about Github for Windows
-- talk about keeping gitignore file in every branch
+- talk about keeping same gitignore file in every branch
+- add everyone to this repo
 
 
 
