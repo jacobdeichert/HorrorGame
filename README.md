@@ -5,6 +5,7 @@
 - add section about Github for Windows
 - talk about keeping same gitignore file in every branch
 - add everyone to this repo
+- talk about changelog file
 
 
 
