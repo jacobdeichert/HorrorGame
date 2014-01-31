@@ -24,7 +24,7 @@ In the **development** branch you will notice a **unity_project** folder which h
 
 ### students get 5 free private repos
 
-If you would like to get 5 free private repos, you just have to give github your humber email address and you might have to send them a short message about what you would use it for. I did it over a year ago, but I think I went here https://github.com/edu and clicked on **I'm a student**... then follow the instructions from there.
+If you would like to get 5 free private repos, you just have to give github your humber email address and you might have to send them a short message about what you would use it for. I did it over a year ago, but I think I went here **https://github.com/edu** and clicked on **I'm a student**... then follow the instructions from there.
 
 
 
