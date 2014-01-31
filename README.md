@@ -2,12 +2,6 @@
 
 
 
-## todo
-- upload example unity_project
-- add everyone
-
-
-
 ### github for windows
 
 If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com). It's extremely simple and should make things a lot less confusing for this project.
@@ -18,7 +12,7 @@ If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.
 
 I created a branch called **development** as Taso suggested. For now, I guess we should keep the **master** branch clean. You will notice the **master** branch is the only branch with this **README** file. The **master** branch also contains a **docs** folder which could be useful to store important documents.
 
-I thought it might be useful to create a **CHANGELOG** file so that each of us can describe what changes we make in each push. This file is located only in the **development** branch. You will also notice a **unity_project** folder which holds an example project. At the moment, I have a folder called **jake** to keep my stuff in. Create your own folder for your stuff.
+I thought it might be useful to create a **CHANGELOG** file so that each of us can describe what changes we make in each push. This file is located only in the **development** branch. You will also notice a **unity_example_project** folder which holds a basic example project. At the moment, I have a folder called **jake** to keep my stuff in. Create your own folder for your stuff.
 
 
 
