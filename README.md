@@ -3,13 +3,13 @@
 
 
 ## todo
-- add section about Github for Windows
 - talk about changelog file
 - encourage people to create branches for each feature, then merge into dev branch
 
 
 
 ### github for windows
+
 If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com). It's extremely simple and should make things a lot less confusing for this project.
 
 
