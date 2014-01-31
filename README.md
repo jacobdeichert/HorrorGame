@@ -3,14 +3,13 @@
 
 ## todo
 - add section about Github for Windows
-- talk about keeping same gitignore file in every branch
-- add everyone to this repo
 - talk about changelog file
 - encourage people to create branches for each feature, then merge into dev branch
 
 
 
-
+### github for windows
+If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com).
 
 
 
@@ -29,9 +28,10 @@ If you would like to get 5 free private repos, you just have to give github your
 
 
 
-### tip with gitignore files
+### tips
 
-If any of you heard what I was having problems with today, it was that I had a global git ignore file located on my computer that I forgot about. This file was ignoring some of unity's required files... which messed with all my prefabs. So don't make the same mistake as me! Also, make sure not to delete the **.gitignore** and **.gitattributes** files within your branch.
+- make sure not to delete the **.gitignore** file in each branch
+- create all new branches based off of the development branch
 
 
 
