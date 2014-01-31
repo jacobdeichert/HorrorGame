@@ -4,7 +4,7 @@
 
 ## todo
 - upload example unity_project
-- encourage people to create branches for each feature, then merge into dev branch
+- add everyone
 
 
 
