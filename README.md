@@ -1,6 +1,7 @@
 # README!!!
 
 
+
 ## todo
 - add section about Github for Windows
 - talk about changelog file
@@ -9,8 +10,7 @@
 
 
 ### github for windows
-If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com).
-
+If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com). It's extremely simple and should make things a lot less confusing for this project.
 
 
 
@@ -32,6 +32,7 @@ If you would like to get 5 free private repos, you just have to give github your
 
 - make sure not to delete the **.gitignore** file in each branch
 - create all new branches based off of the development branch
+- apparently github can't combine unity **.scene** files, therefore, more than one person can't work on the same scene 
 
 
 
