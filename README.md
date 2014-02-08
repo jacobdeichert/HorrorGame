@@ -3,7 +3,7 @@ This file can act as our todo list.
 
 ## Things to Discuss
 
-- Team name "MAEJOR Games"
+- Team name
 - Sprinting
 - Fatigue Bar
 - Jumping
