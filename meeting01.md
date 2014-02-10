@@ -1,0 +1,29 @@
+# Meeting 1
+
+## I will add more detail to this file later tonight. - Jake
+
+# TODO
+- check position is in center of 10x10x10 tile
+
+# Pathing between tiles
+Matt and Eric work on that part.
+
+# Co-op or versus
+Need sense of direction to find other player.
+Hear a noise, show direction noise came from. Sonar.
+Change volume of yelling, monster may come find you.
+Every trap have a switch, deactivate a trap, reactivate a random trap.
+
+Once players find each other, they now have to find the exit.
+
+Low priority
+- fatigue bar
+
+High priority
+- map generation
+
+
+
+
+
+
