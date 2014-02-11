@@ -11,7 +11,3 @@
 ## Low Priority
 - [ ] fatigue bar
 
-
-- [x] cool
-- [x] wow
-- [x] yes
