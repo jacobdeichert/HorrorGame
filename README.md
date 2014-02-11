@@ -3,8 +3,8 @@
 
 
 ## High Priority
-- [x] finish high concept pitch
-- [ ] finish map generation with cubes
+-[x] finish high concept pitch
+-[ ] finish map generation with cubes
 
 
 
