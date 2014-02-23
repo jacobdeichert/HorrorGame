@@ -3,14 +3,15 @@ using System.Collections;
 
 public class EnemyAIType1 : EnemyProperties
 {
-	// MOVEMENT
-	Vector3 leashVector;
-	float leashLength;
-	const float MAXLEASHLENGTH = 40.0f;
-	
+	// ANIMATION
+	float animationSpeed;
+	string animationName;
+
+	// SOUND DETECTION
+	Vector3 audioSourceDirection;
+
 	// Wander Redirection
 	RaycastHit redirectionHit;
-	bool detectedTerrain;
 	bool turned;
 	float turnTimer = 0.0f;
 	Vector3[] rayDirection = new Vector3[50];
@@ -30,8 +31,8 @@ public class EnemyAIType1 : EnemyProperties
 	{
 		maxHealth = 120;
 		currentHealth = 120;
-		enemyState = EnemyState.wander;
-		detectedTerrain = true;
+		enemyState = EnemyState.idle;
+		moveSpeed = 0.0f;
 		turnTimer = 2.0f;
 	}
 	
@@ -42,60 +43,43 @@ public class EnemyAIType1 : EnemyProperties
 			enemyState = EnemyState.dead;
 		switch(enemyState)
 		{
+		case EnemyState.idle:
+			animation.Play("Idle");
+			break;
 		case EnemyState.wander:
-			transform.Translate(Vector3.forward * (WALKSPEED*Time.deltaTime));
-			animation.Play("Walk");
-			leashVector = transform.position - transform.root.position;
-			leashLength = Mathf.Sqrt((Mathf.Pow(leashVector.x, 2.0f) + Mathf.Pow(leashVector.y, 2.0f) + Mathf.Pow(leashVector.z, 2.0f)));
-			if((leashLength > MAXLEASHLENGTH || detectedTerrain) && turnTimer > 2.0f)
+			if(turnTimer > 4.0f)
 			{
 				transform.Rotate(0.0f, Random.Range(135.0f, 225.0f), 0.0f);
 				turnTimer = 0.0f;
 			}
 			turnTimer += Time.deltaTime;
-			detectedTerrain = false;
-
-			// REDIRECTION RAYCAST
-			for(int i=0; i<rayDirection.Length; i++)
-			{
-				theta = (i+1)*(7.2f);
-				theta *= (Mathf.PI/180.0f);
-				rayDirection[i] = Vector3.Normalize(new Vector3(transform.localRotation.x + REDIRECTIONRADIUS*Mathf.Sin(theta), 1.5f,
-					transform.localRotation.z + REDIRECTIONRADIUS*Mathf.Cos(theta)));
-				Debug.DrawRay(transform.position, rayDirection[i] * REDIRECTIONRADIUS, Color.blue);
-				
-				if(Physics.Raycast(transform.position, rayDirection[i], out redirectionHit, REDIRECTIONRADIUS))
-				{
-					if(redirectionHit.collider.name == "Terrain")
-					{
-						detectedTerrain = true;
-					}
-				}
-			}
 			break;
-		case EnemyState.chase:
-			transform.Translate(Vector3.forward * (RUNSPEED*Time.deltaTime));
-			animation.CrossFade("Run");
-			animation["Run"].speed = 0.75f;
-			DetectPlayerToAttack();
+		case EnemyState.searchSlow:
+		case EnemyState.searchFast:
+		case EnemyState.chaseSlow:
+		case EnemyState.chaseFast:
+			transform.Translate(Vector3.forward * (moveSpeed*Time.deltaTime));
+			animation.CrossFade(animationName);
+			animation[animationName].speed = animationSpeed;
+			DetectAudioSourceToAttack();
 			break;
 		case EnemyState.fight:
 			animation.CrossFade("Slam");
-			DetectPlayerToAttack();
+			DetectAudioSourceToAttack();
 			break;
 		case EnemyState.dead:
-			StartCoroutine("EnemyDeath");
+			// StartCoroutine("EnemyDeath");
 			break;
 		}
 	}
 
-	/*
+
 	void OnTriggerStay(Collider c)
 	{
 
-		if(c.gameObject.name == "Player" && enemyState != EnemyState.fight)
+		if(c.gameObject.tag == "Player" && enemyState != EnemyState.fight)
 		{
-			enemyState = EnemyState.chase;
+			enemyState = EnemyState.chaseFast;
 			player = c.gameObject;
 			if(canGrowl)
 			{
@@ -106,17 +90,16 @@ public class EnemyAIType1 : EnemyProperties
 	}
 	void OnTriggerExit(Collider c)
 	{
-		if(c.gameObject.name == "Player")
+		if(c.gameObject.tag == "Player")
 		{
 			canGrowl = true;
 			enemyState = EnemyState.wander;
 		}
 	}
-	*/
-
-	void DetectPlayerToAttack()
+	
+	private void DetectAudioSourceToAttack()
 	{
-		transform.rotation = FacePlayer(gameObject, player, false, TURNSPEED);
+		transform.rotation = FaceAudioSource(false);
 		
 		// ATTACK RAYCAST
 		isAttacking = false;
@@ -130,7 +113,7 @@ public class EnemyAIType1 : EnemyProperties
 			
 			if(Physics.Raycast(transform.position, rayDirection[i], out attackHit, ATTACKRADIUS))
 			{
-				if(attackHit.collider.name == "Player")
+				if(attackHit.transform.gameObject.tag == "Player")
 				{
 					enemyState = EnemyState.fight;
 					isAttacking = true;
@@ -138,6 +121,63 @@ public class EnemyAIType1 : EnemyProperties
 			}
 		}
 		if(isAttacking == false)
-			enemyState = EnemyState.chase;
+			enemyState = EnemyState.chaseSlow;
+	}
+
+	private Quaternion FaceAudioSource(bool isRotatingPitch)
+	{
+		if(isRotatingPitch == false)
+			audioSourceDirection.y = 0;
+		Quaternion rotation = Quaternion.LookRotation(audioSourceDirection);
+		return Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * TURNSPEED);
+	}
+
+	void OnHearSound(SoundSourceInfo sourceInfo)
+	{
+		// DETECT SOUND
+		audioSourceDirection = sourceInfo.transform.position - transform.position;
+		float audioSourceDistance = audioSourceDirection.magnitude;
+
+		// Volume is increased 100 fold for ease of use with distance.
+		// Distance is subtracted to resemble the monster's perception of the source's volume, making volume decay linear, which might be inaccurate.
+		float audioSourceRelativeVolume = (sourceInfo.volume * 100) - audioSourceDistance;
+		audioSourceDirection.Normalize();
+
+		// DETERMINE RESPONSE LEVEL
+		if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
+		{
+			enemyState = EnemyState.wander;
+			moveSpeed = 2.0f;
+			animationSpeed = 0.5f;
+			animationName = "Walk";
+		}
+		else if(audioSourceRelativeVolume > 19 && audioSourceRelativeVolume < 40)
+		{
+			enemyState = EnemyState.searchSlow;
+			moveSpeed = 3.0f;
+			animationSpeed = 0.7f;
+			animationName = "Walk";
+		}
+		else if(audioSourceRelativeVolume > 39 && audioSourceRelativeVolume < 60)
+		{
+			enemyState = EnemyState.searchFast;
+			moveSpeed = 4.0f;
+			animationSpeed = 0.9f;
+			animationName = "Walk";
+		}
+		else if(audioSourceRelativeVolume > 59 && audioSourceRelativeVolume < 80)
+		{
+			enemyState = EnemyState.chaseSlow;
+			moveSpeed = 6.0f;
+			animationSpeed = 0.7f;
+			animationName = "Run";
+		}
+		else if(audioSourceRelativeVolume > 79)
+		{
+			enemyState = EnemyState.chaseFast;
+			moveSpeed = 7.5f;
+			animationSpeed = 0.9f;
+			animationName = "Run";
+		}
 	}
 }
