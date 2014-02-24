@@ -102,7 +102,7 @@ public class EnemyAIType1 : EnemyProperties
 		}
 	}
 	
-	private void DetermineAttackRange()
+	void DetermineAttackRange()
 	{
 		// ATTACK RAYCAST
 		isAttacking = false;
@@ -127,7 +127,7 @@ public class EnemyAIType1 : EnemyProperties
 			enemyState = EnemyState.chaseSlow;
 	}
 
-	private Quaternion FaceTarget(bool isRotatingPitch, Vector3 direction)
+	Quaternion FaceTarget(bool isRotatingPitch, Vector3 direction)
 	{
 		if(isRotatingPitch == false)
 			direction.y = 0;
@@ -147,7 +147,13 @@ public class EnemyAIType1 : EnemyProperties
 		chaseDirection.Normalize();
 
 		// DETERMINE RESPONSE LEVEL
-		if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
+		if(audioSourceRelativeVolume < 0)
+		{
+			enemyState = EnemyState.idle;
+			moveSpeed = 0.0f;
+			animationSpeed = 1.0f;
+		}
+		else if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
 		{
 			enemyState = EnemyState.wander;
 			moveSpeed = 2.0f;

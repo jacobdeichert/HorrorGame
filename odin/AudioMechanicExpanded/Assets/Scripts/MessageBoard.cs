@@ -7,7 +7,6 @@ public class MessageBoard : MonoBehaviour
 	Rect msgOutRect = new Rect (Screen.width/2 - 200, Screen.height - 450, 400, 375);
 	bool boardActive = false;
 
-	MessagePost newMsg;
 	Queue<MessagePost> msgQueue = new Queue<MessagePost>();
 	string msgTotal;
 
@@ -44,12 +43,14 @@ public class MessageBoard : MonoBehaviour
 
 	public void Post(string message)
 	{
-		newMsg = new MessagePost (message);
-		msgQueue.Enqueue (newMsg);
+		msgQueue.Enqueue (new MessagePost(message));
 
 		AudioClip sound;
 		if (makeSound.presets.TryGetValue (message, out sound))
-			audio.PlayOneShot (sound);
+		{
+			audio.clip = sound;
+			audio.Play();
+		}
 	}
 
 	void OnGUI()
