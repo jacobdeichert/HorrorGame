@@ -3,12 +3,12 @@ using System.Collections;
 
 public class EnemyAIType1 : EnemyProperties
 {
-	// ANIMATION
+	// ANIMATION ADJUSTMENTS
 	float animationSpeed;
 	string animationName;
 
-	// SOUND DETECTION
-	Vector3 audioSourceDirection;
+	// SOUND/PLAYER DETECTION
+	Vector3 chaseDirection;
 
 	// Wander Redirection
 	RaycastHit redirectionHit;
@@ -59,13 +59,14 @@ public class EnemyAIType1 : EnemyProperties
 		case EnemyState.chaseSlow:
 		case EnemyState.chaseFast:
 			transform.Translate(Vector3.forward * (moveSpeed*Time.deltaTime));
+			transform.rotation = FaceTarget(false, chaseDirection);
 			animation.CrossFade(animationName);
 			animation[animationName].speed = animationSpeed;
-			DetectAudioSourceToAttack();
+			DetermineAttackRange();
 			break;
 		case EnemyState.fight:
 			animation.CrossFade("Slam");
-			DetectAudioSourceToAttack();
+			DetermineAttackRange();
 			break;
 		case EnemyState.dead:
 			// StartCoroutine("EnemyDeath");
@@ -76,13 +77,17 @@ public class EnemyAIType1 : EnemyProperties
 
 	void OnTriggerStay(Collider c)
 	{
-
 		if(c.gameObject.tag == "Player" && enemyState != EnemyState.fight)
 		{
+			chaseDirection = c.transform.position - transform.position;
+			chaseDirection.Normalize();
+
 			enemyState = EnemyState.chaseFast;
-			player = c.gameObject;
 			if(canGrowl)
 			{
+				moveSpeed = 7.5f;
+				animationSpeed = 0.9f;
+				animationName = "Run";
 				audio.PlayOneShot(sfxGrowl);
 				canGrowl = false;
 			}
@@ -97,10 +102,8 @@ public class EnemyAIType1 : EnemyProperties
 		}
 	}
 	
-	private void DetectAudioSourceToAttack()
+	private void DetermineAttackRange()
 	{
-		transform.rotation = FaceAudioSource(false);
-		
 		// ATTACK RAYCAST
 		isAttacking = false;
 		for(int i=0; i<rayDirection.Length; i++)
@@ -124,24 +127,24 @@ public class EnemyAIType1 : EnemyProperties
 			enemyState = EnemyState.chaseSlow;
 	}
 
-	private Quaternion FaceAudioSource(bool isRotatingPitch)
+	private Quaternion FaceTarget(bool isRotatingPitch, Vector3 direction)
 	{
 		if(isRotatingPitch == false)
-			audioSourceDirection.y = 0;
-		Quaternion rotation = Quaternion.LookRotation(audioSourceDirection);
+			direction.y = 0;
+		Quaternion rotation = Quaternion.LookRotation(direction);
 		return Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * TURNSPEED);
 	}
 
 	void OnHearSound(SoundSourceInfo sourceInfo)
 	{
 		// DETECT SOUND
-		audioSourceDirection = sourceInfo.transform.position - transform.position;
-		float audioSourceDistance = audioSourceDirection.magnitude;
+		chaseDirection  = sourceInfo.transform.position - transform.position;
+		float audioSourceDistance = chaseDirection.magnitude;
 
 		// Volume is increased 100 fold for ease of use with distance.
 		// Distance is subtracted to resemble the monster's perception of the source's volume, making volume decay linear, which might be inaccurate.
 		float audioSourceRelativeVolume = (sourceInfo.volume * 100) - audioSourceDistance;
-		audioSourceDirection.Normalize();
+		chaseDirection.Normalize();
 
 		// DETERMINE RESPONSE LEVEL
 		if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
@@ -168,14 +171,14 @@ public class EnemyAIType1 : EnemyProperties
 		else if(audioSourceRelativeVolume > 59 && audioSourceRelativeVolume < 80)
 		{
 			enemyState = EnemyState.chaseSlow;
-			moveSpeed = 6.0f;
+			moveSpeed = 5.0f;
 			animationSpeed = 0.7f;
 			animationName = "Run";
 		}
 		else if(audioSourceRelativeVolume > 79)
 		{
 			enemyState = EnemyState.chaseFast;
-			moveSpeed = 7.5f;
+			moveSpeed = 6.0f;
 			animationSpeed = 0.9f;
 			animationName = "Run";
 		}

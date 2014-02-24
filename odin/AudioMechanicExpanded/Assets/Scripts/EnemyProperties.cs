@@ -18,8 +18,6 @@ public class EnemyProperties : MonoBehaviour
 	public AudioClip sfxDeath;
 
 	protected bool canGrowl = true;
-	
-	protected GameObject player;
 
 	void ApplyDamage(int damage)
 	{

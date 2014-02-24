@@ -8,7 +8,6 @@ public struct SoundSourceInfo
 };
 public class AudioOutputToEnemy : MonoBehaviour
 {
-
 	SoundSourceInfo soundInfo;
 
 	GameObject monster;
