@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Generator : MonoBehaviour {
 
-    public int mapWidth = 10;
-    public int mapHieght = 10;
+    public int mapWidth = 11;
+    public int mapHieght = 11;
     private int mapSize;
 
     public GameObject[] prefabs;
