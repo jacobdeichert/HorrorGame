@@ -24,14 +24,6 @@ public class PlayerController : MonoBehaviour {
 		// get correct speed
 		float forwardAndBackSpeed = walkSpeed;
 
-		if (isGrounded && Input.GetKey(KeyCode.LeftControl)) {
-			isRunning = true;
-		}
-
-		if (Input.GetKeyUp(KeyCode.LeftControl)) {
-			isRunning = false;
-		}
-
 		if (isRunning) {
 			forwardAndBackSpeed = runSpeed;
 		}
@@ -49,11 +41,22 @@ public class PlayerController : MonoBehaviour {
 		// jump
 		if (canJump && isGrounded && Input.GetButton("Jump")) {
 			rigidbody.velocity = new Vector3(velocity.x, Mathf.Sqrt(2 * jumpHeight * gravity), velocity.z);
+			isGrounded = false;
 		}
 		
 		// apply gravity
 		rigidbody.AddForce(new Vector3 (0, -gravity * rigidbody.mass, 0));
-		isGrounded = false;
+		//isGrounded = false;
+	}
+
+	void Update() {
+		if (isGrounded && Input.GetKeyDown(KeyCode.LeftControl)) {
+			isRunning = true;
+		}
+		
+		if (Input.GetKeyUp(KeyCode.LeftControl)) {
+			isRunning = false;
+		}
 	}
 	
 	void OnCollisionStay () {
