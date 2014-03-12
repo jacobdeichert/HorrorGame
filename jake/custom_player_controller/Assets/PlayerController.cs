@@ -50,11 +50,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() {
-		if (isGrounded && Input.GetKeyDown(KeyCode.LeftControl)) {
+		if (isGrounded && Input.GetKeyDown(KeyCode.LeftShift)) {
 			isRunning = true;
 		}
 		
-		if (Input.GetKeyUp(KeyCode.LeftControl)) {
+		if (Input.GetKeyUp(KeyCode.LeftShift)) {
 			isRunning = false;
 		}
 	}
