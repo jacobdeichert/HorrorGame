@@ -16,6 +16,7 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject trap;
     private int trapSpawnChance = 10;
     private static System.Random rand = new System.Random();
+    public bool hasCeiling = true;
 
 	// Use this for initialization
 	void Start () {
@@ -30,7 +31,7 @@ public class MazeGenerator : MonoBehaviour {
         GameObject Player2 = Instantiate(player2) as GameObject;
        // Player1.transform.position = Player1pos;
         Player2.transform.position = Player2pos;
-        
+        GameObject End = Instantiate(end) as GameObject;
         for (int i = 0; i < mapheight; i++)
         {
             for(int j = 0;j<mapwidth;j++)
@@ -38,6 +39,7 @@ public class MazeGenerator : MonoBehaviour {
 
                 Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
                 GameObject Floor = Instantiate(floor) as GameObject;
+                //Place floors
                 if (!(maze[i, j] == 1))
                 {
                     //Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
@@ -56,21 +58,44 @@ public class MazeGenerator : MonoBehaviour {
                     
                     if (Wall != null)
                     {
-                        switch (Random.Range(0,15))
+                        //Randomly take out walls and replace with floors to create loops/multi paths
+                        switch (Random.Range(0,20))
                         {
                             case 1:
                                // if ((pos.x - Player1pos.x >= wallSize * 2) && (pos.z - Player1pos.z >= wallSize * 2))
                                 //{
 
-                                    Floor.transform.position = Floorpos;
-                                    //Trap.transform.position = pos;
+                                    
+                                    if (i == 0 || i == mapheight - 1 || j == 0 || j == mapwidth - 1)
+                                        Wall.transform.position = pos;
+                                    else
+                                    {
+                                        Floor.transform.position = Floorpos;
+                                    }
+                                    
                                 //}
+                                break;
+                            case 2:
+                                if (i == mapheight - 2 && j == mapwidth - 1)
+                                {
+                                    //End position
+                                    Floor.transform.position = Floorpos;
+                                    End.transform.position = new Vector3((mapheight-2) * wallSize, 0 - wallSize, (j+1) * wallSize);
+                                }
+                                else
+                                {
+                                    Trap.transform.position = pos;
+                                }
+                                    
                                 break;
 
                             default:
+                                
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
+                                    //End position
                                     Floor.transform.position = Floorpos;
+                                    End.transform.position = new Vector3((mapheight - 2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
                                 else
                                 {
@@ -79,34 +104,21 @@ public class MazeGenerator : MonoBehaviour {
                                
                                 break;
                         }
-                        switch (Random.Range(0, 15))
-                        {
-                            case 1:
-                                if ((pos.x - Player1pos.x >= wallSize * 2) && (pos.z - Player1pos.z >= wallSize * 2))
-                                {
-                                Trap.transform.position = pos;
-                                }
-                                break;
 
-                            default:
-                                break;
-                        }
-                        if (i == 0||i==mapheight-1||j==0||j==mapwidth-1)
-                        {
-                            if (i == mapheight - 2 && j == mapwidth - 1)
-                            {
-                            }
-                            else
-                            {
-                                Wall.transform.position = pos;
-                            }
-                        }
-                        else
-                        {
-                           // Wall.transform.position = pos;    
-                        }
-                        
-                             
+                        //Spawn Traps Randomly
+                        //switch (Random.Range(0, 15))
+                        //{
+                        //    case 1:
+                        //        if ((pos.x - Player1pos.x >= wallSize * 2) && (pos.z - Player1pos.z >= wallSize * 2))
+                        //        {
+                        //            Trap.transform.position = pos;
+                        //        }
+                        //        break;
+
+                        //    default:
+                        //        //Wall.transform.position = pos;
+                        //        break;
+                        //}                         
                     }
                 }
             }
