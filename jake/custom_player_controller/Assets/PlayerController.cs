@@ -24,11 +24,12 @@ public class PlayerController : MonoBehaviour {
 		// get correct speed
 		float forwardAndBackSpeed = walkSpeed;
 
+        // if running, set run speed
 		if (isRunning) {
 			forwardAndBackSpeed = runSpeed;
 		}
 
-		// calculate how fast we should be moving
+		// calculate how fast it should be moving
 		Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal") * strafeSpeed, 0, Input.GetAxis("Vertical") * forwardAndBackSpeed);
 		targetVelocity = transform.TransformDirection(targetVelocity);
 		
@@ -46,21 +47,31 @@ public class PlayerController : MonoBehaviour {
 		
 		// apply gravity
 		rigidbody.AddForce(new Vector3 (0, -gravity * rigidbody.mass, 0));
-		//isGrounded = false;
 	}
 
 	void Update() {
+        // check if the player is touching a surface below them
+        checkGrounded();
+
+        // check if the player is running
 		if (isGrounded && Input.GetKeyDown(KeyCode.LeftShift)) {
 			isRunning = true;
 		}
 		
+        // check if the player stops running
 		if (Input.GetKeyUp(KeyCode.LeftShift)) {
 			isRunning = false;
 		}
 	}
 	
-	void OnCollisionStay () {
-		isGrounded = true;
+	void checkGrounded() {
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, transform.up * -1);
+
+        // if there is something directly below the player
+        if (Physics.Raycast(ray, out hit, transform.localScale.y / 2)) {
+            isGrounded = true;
+        }
 	}
 
 
