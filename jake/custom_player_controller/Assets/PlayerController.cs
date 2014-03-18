@@ -71,19 +71,8 @@ public class PlayerController : MonoBehaviour {
         // if there is something directly below the player
         if (Physics.Raycast(ray, out hit, transform.localScale.y / 2)) {
             isGrounded = true;
-            Debug.Log("grounded");
-        }
-        else
-        {
-            isGrounded = false;
-            Debug.Log("air");
         }
 	}
-
-    void OnCollisionStay()
-    {
-        Debug.Log("weeee");
-    }
 
 
 }
