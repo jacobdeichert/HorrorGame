@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class PathGen : MonoBehaviour {
 
+	int nodeSize;
+
 	// Use this for initialization
 	void Start () {
-	
+		nodeSize = 1;
 	}
 	
 	// Update is called once per frame
@@ -19,6 +21,8 @@ public class PathGen : MonoBehaviour {
 		List<Node> openList = new List<Node>();
 		List<Node> closedList = new List<Node>();
 		List<Node> path = new List<Node>();
+
+		nodeSize = (int)(_start.renderer.bounds.size.x);
 
 		//add _start node to openList
 		if (_start != null){
@@ -33,7 +37,6 @@ public class PathGen : MonoBehaviour {
 					if (x.h > y.h) return 1;
 					else if (x.h < y.h) return -1;
 					else return 0;
-
 				}
 				else if (x.f > y.f) return 1;
 				else if (x.f < y.f) return -1;
@@ -51,7 +54,7 @@ public class PathGen : MonoBehaviour {
 			//go through the array of _nodes
 			foreach (Node node in _nodes){
 				//if node is above current node
-				if (node.transform.position.x == current.transform.position.x && node.transform.position.z == current.transform.position.z + 1){
+				if (node.transform.position.x == current.transform.position.x && node.transform.position.z == current.transform.position.z + nodeSize){
 					//if node isn't a wall or on the closedList
 					if (!node.wall && !node.isClosed){
 						//if on the openList simply update it's parent
@@ -71,7 +74,7 @@ public class PathGen : MonoBehaviour {
 					}
 				}
 				//below
-				if (node.transform.position.x == current.transform.position.x && node.transform.position.z == current.transform.position.z - 1){
+				if (node.transform.position.x == current.transform.position.x && node.transform.position.z == current.transform.position.z - nodeSize){
 					if (!node.wall && !node.isClosed){
 						if (node.isOpen){
 							if (node.parent.f > current.f){
@@ -87,7 +90,7 @@ public class PathGen : MonoBehaviour {
 					}
 				}
 				//right
-				if (node.transform.position.x == current.transform.position.x + 1 && node.transform.position.z == current.transform.position.z){
+				if (node.transform.position.x == current.transform.position.x + nodeSize && node.transform.position.z == current.transform.position.z){
 					if (!node.wall && !node.isClosed){
 						if (node.isOpen){
 							if (node.parent.f > current.f){
@@ -103,7 +106,7 @@ public class PathGen : MonoBehaviour {
 					}
 				}
 				//left
-				if (node.transform.position.x == current.transform.position.x - 1 && node.transform.position.z == current.transform.position.z){
+				if (node.transform.position.x == current.transform.position.x - nodeSize && node.transform.position.z == current.transform.position.z){
 					if (!node.wall && !node.isClosed){
 						if (node.isOpen){
 							if (node.parent.f > current.f){
