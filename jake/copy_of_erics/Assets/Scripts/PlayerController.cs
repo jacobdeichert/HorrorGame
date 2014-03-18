@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour {
         Ray ray = new Ray(transform.position, transform.up * -1);
 
         // if there is something directly below the player
-        if (Physics.Raycast(ray, out hit, transform.localScale.y / 2)) {
+        if (Physics.Raycast(ray, out hit, collider.bounds.size.y / 2)) {
             isGrounded = true;
         }
 	}
