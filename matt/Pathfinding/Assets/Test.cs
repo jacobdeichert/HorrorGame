@@ -23,20 +23,9 @@ public class Test : MonoBehaviour {
 	//calculates path then sets nodes path true to show path
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.E)){
-			ResetPath();
-			path = gameObject.GetComponent<PathGen>().CalculatePath(start, end, nodes);
-			if (path.Count > 0){
-				foreach (Node node in path){
-					if (node != null){
-						//sets nodes path true to change it's color
-						node.path = true;
-					}
-				}
-			}
-			else{
-				Debug.Log("No path.");
-			}
+			FindPath();
 		}
+		//FindPath();
 	}
 	//resets all the nodes parents
 	//and sets a new start node based on players position
@@ -48,6 +37,21 @@ public class Test : MonoBehaviour {
 			if (new Vector2(node.transform.position.x, node.transform.position.z) == player){
 				start = node;
 			}
+		}
+	}
+	private void FindPath(){
+		ResetPath();
+		path = gameObject.GetComponent<PathGen>().CalculatePath(start, end, nodes);
+		if (path.Count > 0){
+			foreach (Node node in path){
+				if (node != null){
+					//sets nodes path true to change it's color
+					node.path = true;
+				}
+			}
+		}
+		else{
+			Debug.Log("No path.");
 		}
 	}
 }

@@ -7,6 +7,7 @@ public class Node : MonoBehaviour {
 	public Node parent;
 	//path scores
 	public float g, h, f;
+	public int listIndex;
 	//materials
 	public Material green, red, black, blue;
 
