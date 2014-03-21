@@ -2,17 +2,18 @@
 using System.Collections;
 
 public class Node : MonoBehaviour {
-
+	
 	public bool wall, path, isOpen, isClosed;
 	public Node parent;
 	//path scores
 	public float g, h, f;
+	public int listIndex;
 	//materials
 	public Material green, red, black, blue;
-
+	
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 	
 	//used only to change the blocks colors
@@ -45,3 +46,4 @@ public class Node : MonoBehaviour {
 		f = g + h;
 	}
 }
+

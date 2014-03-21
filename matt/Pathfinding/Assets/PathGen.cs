@@ -5,10 +5,12 @@ using System.Collections.Generic;
 public class PathGen : MonoBehaviour {
 
 	int nodeSize;
+	int mapWidth;
 
 	// Use this for initialization
 	void Start () {
 		nodeSize = 1;
+		mapWidth = 18;
 	}
 	
 	// Update is called once per frame
@@ -64,58 +66,52 @@ public class PathGen : MonoBehaviour {
 			closedList.Add(current);
 			//remove lowest openList node
 			openList.RemoveAt(0);
-			if (current.transform.position.x == _end.transform.position.x
-			    && current.transform.position.z == _end.transform.position.z){
-				Debug.Log("end node reached.");
+			if (current == _end){
 				break;
 			}
-			//go through the array of _nodes
-//			foreach (Node node in _nodes){
-			int _index = current.listIndex - 18;
+			//access adjacent nodes by their index
+			int _index = current.listIndex - mapWidth;
+			//set index to currents index - mapWidth (above)
 			if (_index >= 0 && _index < _nodes.Count){
-				//if node is above current node
-				if (_nodes[_index].transform.position.x == current.transform.position.x && _nodes[_index].transform.position.z == current.transform.position.z - nodeSize){
-					//if node isn't a wall or on the closedList
-					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
-						//if on the openList simply update it's parent
-						if (_nodes[_index].isOpen){
-							if (_nodes[_index].parent.f > current.f){
-								_nodes[_index].parent = current;
-							}
-						}
-						//else add to the openList
-						else{
+				//if node isn't a wall or on the closedList
+				if (!_nodes[_index].wall && !_nodes[_index].isClosed){
+					//if on the openList simply update it's parent
+					if (_nodes[_index].isOpen){
+						if (_nodes[_index].parent.f > current.f){
 							_nodes[_index].parent = current;
-							openList.Add(_nodes[_index]);
-							_nodes[_index].isOpen = true;
 						}
-						//calculate nodes traversal values
-						_nodes[_index].CalculateValues(_nodes[_index].parent, _end);
 					}
+					//else add to the openList
+					else{
+						_nodes[_index].parent = current;
+						openList.Add(_nodes[_index]);
+						_nodes[_index].isOpen = true;
+					}
+					//calculate nodes traversal values
+					_nodes[_index].CalculateValues(_nodes[_index].parent, _end);
 				}
 			}
-			_index = current.listIndex + 18;
+			_index = current.listIndex + mapWidth;
+			//set index to currents index + mapWidth (below)
 			if (_index >= 0 && _index < _nodes.Count){
-				//below
-				if (_nodes[_index].transform.position.x == current.transform.position.x && _nodes[_index].transform.position.z == current.transform.position.z + nodeSize){
-					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
-						if (_nodes[_index].isOpen){
-							if (_nodes[_index].parent.f > current.f){
-								_nodes[_index].parent = current;
-							}
-						}
-						else{
+				if (!_nodes[_index].wall && !_nodes[_index].isClosed){
+					if (_nodes[_index].isOpen){
+						if (_nodes[_index].parent.f > current.f){
 							_nodes[_index].parent = current;
-							openList.Add(_nodes[_index]);
-							_nodes[_index].isOpen = true;
 						}
-						_nodes[_index].CalculateValues(_nodes[_index].parent, _end);
 					}
+					else{
+						_nodes[_index].parent = current;
+						openList.Add(_nodes[_index]);
+						_nodes[_index].isOpen = true;
+					}
+					_nodes[_index].CalculateValues(_nodes[_index].parent, _end);
 				}
 			}
 			_index = current.listIndex - 1;
+			//set index to currents index - 1 (right)
 			if (_index >= 0 && _index < _nodes.Count){
-				//right
+				//need to check actual position of nodes because current node may be an edge
 				if (_nodes[_index].transform.position.x == current.transform.position.x - nodeSize && _nodes[_index].transform.position.z == current.transform.position.z){
 					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 						if (_nodes[_index].isOpen){
@@ -133,8 +129,9 @@ public class PathGen : MonoBehaviour {
 				}
 			}
 			_index = current.listIndex + 1;
+			//set index to currents index + 1 (left)
 			if (_index >= 0 && _index < _nodes.Count){
-				//left
+				//need to check actual position of nodes because current node may be an edge
 				if (_nodes[_index].transform.position.x == current.transform.position.x + nodeSize && _nodes[_index].transform.position.z == current.transform.position.z){
 					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 						if (_nodes[_index].isOpen){
@@ -151,9 +148,7 @@ public class PathGen : MonoBehaviour {
 					}
 				}
 			}
-	//		}
 		}
-		Debug.Log(closedList.Count);
 		//fills path
 		if (openList.Count != 0){
 			//adds the last node in the closedList aka the target/end
@@ -178,17 +173,6 @@ public class PathGen : MonoBehaviour {
 		}
 		//reverses the path so the target/end is last and not first, then returns the list
 		path.Reverse();
-		Debug.Log(path.Count);
 		return path;
 	}
-	/* //not using anymore
-	private bool CheckList(List<Node> _nodes, Node _node){
-		bool test = false;
-		foreach (Node node in _nodes){
-			if (node == _node){
-				test = true;
-			}
-		}
-		return test;
-	}*/
 }
