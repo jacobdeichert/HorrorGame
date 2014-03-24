@@ -12,7 +12,6 @@ public class Test : MonoBehaviour {
 	//sets the end target for now
 	//sets up all nodes in the scene in a list
 	void Start () {
-		gameObject.AddComponent<PathGen>();
 		end = GameObject.Find ("End").GetComponent<Node>();
 		foreach (Node node in GameObject.FindObjectsOfType<Node>()){
 			nodes.Add(node);

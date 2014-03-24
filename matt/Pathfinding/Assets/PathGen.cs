@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class PathGen : MonoBehaviour {
 
 	int nodeSize;
-	int mapWidth;
+	//width of map
+	public int mapSize;
 
 	// Use this for initialization
 	void Start () {
-		nodeSize = 1;
-		mapWidth = 18;
+
 	}
 	
 	// Update is called once per frame
@@ -34,12 +34,12 @@ public class PathGen : MonoBehaviour {
 		foreach (Node node in _nodes){
 			node.listIndex = _nodes.IndexOf(node);
 		}
-
+		//temp lists
 		Node current;
 		List<Node> openList = new List<Node>();
 		List<Node> closedList = new List<Node>();
 		List<Node> path = new List<Node>();
-
+		//sets nodeSize to renderer bounds
 		nodeSize = (int)(_start.renderer.bounds.size.x);
 
 		//add _start node to openList
@@ -70,7 +70,7 @@ public class PathGen : MonoBehaviour {
 				break;
 			}
 			//access adjacent nodes by their index
-			int _index = current.listIndex - mapWidth;
+			int _index = current.listIndex - mapSize;
 			//set index to currents index - mapWidth (above)
 			if (_index >= 0 && _index < _nodes.Count){
 				//if node isn't a wall or on the closedList
@@ -91,7 +91,7 @@ public class PathGen : MonoBehaviour {
 					_nodes[_index].CalculateValues(_nodes[_index].parent, _end);
 				}
 			}
-			_index = current.listIndex + mapWidth;
+			_index = current.listIndex + mapSize;
 			//set index to currents index + mapWidth (below)
 			if (_index >= 0 && _index < _nodes.Count){
 				if (!_nodes[_index].wall && !_nodes[_index].isClosed){
