@@ -23,14 +23,6 @@ public class TrapTrigger : MonoBehaviour {
             Trap trap = trapPrefab.GetComponentInChildren<Trap>() as Trap;
             trap.begin();
 
-			//if (trapType == "trap_crushing_wall") {
-				//CrushingWallTrap trap = floorSection.GetComponentInChildren<CrushingWallTrap>() as CrushingWallTrap;
-                
-			//} else if (trapType == "floor_section_falling_floor_trap") {
-				//FallingFloorTrap trap = floorSection.GetComponentInChildren<FallingFloorTrap>() as FallingFloorTrap;
-				//trap.activate();
-			//}
-
 			isActivated = true;
 		}
 	}

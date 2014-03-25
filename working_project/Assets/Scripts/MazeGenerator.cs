@@ -25,10 +25,8 @@ public class MazeGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         maze = GenerateMaze(mapheight,mapwidth);
-        wall.transform.localScale = new Vector3(1*wallSize,1*wallSize,1*wallSize);
+        wall.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         floor.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
-        Floortrap.transform.localScale = new Vector3(1, 1, 1);
-        Walltrap.transform.localScale = new Vector3(1, 1, 1);
         end.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
@@ -36,7 +34,7 @@ public class MazeGenerator : MonoBehaviour {
         GameObject Player2 = Instantiate(player2) as GameObject;
        // Player1.transform.position = Player1pos;
         Player2.transform.position = Player2pos;
-        GameObject End = Instantiate(end) as GameObject;
+        //GameObject End = Instantiate(end) as GameObject;
 
         
         // Create wall around the map
@@ -114,7 +112,7 @@ public class MazeGenerator : MonoBehaviour {
                                     //End position
                                     GameObject Floor = Instantiate(floor) as GameObject;
                                     Floor.transform.position = Floorpos;
-                                    End.transform.position = new Vector3((mapheight-2) * wallSize, 0 - wallSize, (j+1) * wallSize);
+                                    //End.transform.position = new Vector3((mapheight-2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
                                 else
                                 {
@@ -135,7 +133,7 @@ public class MazeGenerator : MonoBehaviour {
                                     //End position
                                     GameObject Floor = Instantiate(floor) as GameObject;
                                     Floor.transform.position = Floorpos;
-                                    End.transform.position = new Vector3((mapheight - 2) * wallSize, 0 - wallSize, (j+1) * wallSize);
+                                    //End.transform.position = new Vector3((mapheight - 2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
                                 else
                                 {
@@ -163,6 +161,15 @@ public class MazeGenerator : MonoBehaviour {
                 }
             }
         }
+
+
+        // fix the rotation of all traps
+        Trap[] traps;
+        traps = GameObject.FindObjectsOfType(typeof(Trap)) as Trap[];
+        foreach (Trap t in traps) {
+            t.correctRotation();
+        }
+
 	}
 
     private int[,] GenerateMaze(int height, int width)

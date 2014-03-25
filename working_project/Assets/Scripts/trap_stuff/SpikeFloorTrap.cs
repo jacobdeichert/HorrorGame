@@ -13,24 +13,28 @@ public class SpikeFloorTrap : Trap {
 
     void Update() {
         if (state == TrapState.BEGUN && !hasInvokedEnd) {
-            //hasInvokedEnd = true;
-            //Invoke("end", 10f);
+            hasInvokedEnd = true;
+            Invoke("end", 1f);
         }
     }
 
 
 
     public override void correctRotation() {
-        //todo: make a check for 4 rotations and no success (blocks on each side)
-
         //RaycastHit hit;
         //Ray ray = new Ray(transform.position, transform.forward);
-        //bool hasHitSomething = Physics.Raycast(ray, out hit, 2.0f);
+        //bool hasHitSomething = Physics.Raycast(ray, out hit, 3.0f);
 
-        //while (hasHitSomething) {
+        //int testCount = 4;
+
+        //while (!hasHitSomething) {
         //    gameObject.transform.parent.gameObject.transform.Rotate(0, 90, 0);
         //    ray = new Ray(transform.position, transform.forward);
-        //    hasHitSomething = Physics.Raycast(ray, out hit, 2.0f);
+        //    hasHitSomething = Physics.Raycast(ray, out hit, 3.0f);
+
+        //    // stop the loop after 4 tries (trap is blocked on all sides)
+        //    testCount--;
+        //    if (testCount <= 0) break;
         //}
     }
 
