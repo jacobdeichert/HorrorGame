@@ -16,6 +16,7 @@ public class CrushingWallTrap : Trap {
             hasInvokedEnd = true;
             Invoke("end", 10f);
         }
+        Debug.DrawRay(transform.position + transform.up * -3, transform.forward);
 	}
 
 
@@ -34,6 +35,17 @@ public class CrushingWallTrap : Trap {
             // stop the loop after 4 tries (trap is blocked on all sides)
             testCount--;
             if (testCount <= 0) break;
+        }
+
+        // check if there is a floor trap in front of the wall trap
+        ray = new Ray(transform.position + transform.up * -3, transform.forward);
+        if (Physics.Raycast(ray, out hit, 1.0f)) {
+            if (hit.collider.transform.parent
+                && (hit.collider.transform.parent.GetComponentInChildren<SpikeFloorTrap>()) as SpikeFloorTrap) {
+                // remove the floor trap trigger so that it doesn't interfere with the wall trap trigger
+                // the floor trap will never be activated
+                Destroy(hit.collider.transform.parent.GetChild(2).gameObject);
+            }
         }
     }
 
