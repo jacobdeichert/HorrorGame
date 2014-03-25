@@ -13,7 +13,11 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject floor;
    // public GameObject player1;
     public GameObject player2;
-    public GameObject trap;
+    public GameObject Floortrap;
+    public GameObject Walltrap;
+    CrushingWallTrap setWall;
+    public GameObject Outerwallx;
+    public GameObject Outerwallz;
     private int trapSpawnChance = 10;
     private static System.Random rand = new System.Random();
     public bool hasCeiling = true;
@@ -23,7 +27,8 @@ public class MazeGenerator : MonoBehaviour {
         maze = GenerateMaze(mapheight,mapwidth);
         wall.transform.localScale = new Vector3(1*wallSize,1*wallSize,1*wallSize);
         floor.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
-        trap.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
+        Floortrap.transform.localScale = new Vector3(1, 1, 1);
+        Walltrap.transform.localScale = new Vector3(1, 1, 1);
         end.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
@@ -32,32 +37,55 @@ public class MazeGenerator : MonoBehaviour {
        // Player1.transform.position = Player1pos;
         Player2.transform.position = Player2pos;
         GameObject End = Instantiate(end) as GameObject;
+
+        
+        // Create wall around the map
+        Outerwallx.transform.localScale = new Vector3((1 * wallSize)*mapheight, 1 * wallSize, 1 * wallSize);
+        Outerwallz.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, (1 * wallSize)*mapwidth);
+        GameObject OuterWallx = Instantiate(Outerwallx) as GameObject;
+        OuterWallx.transform.position = new Vector3((wallSize*mapheight)/2-2, 0, 0 - (1 * wallSize));
+        OuterWallx.transform.Rotate( new Vector3(0, 90, 0));
+        GameObject OuterWallx2 = Instantiate(Outerwallx) as GameObject;
+        OuterWallx2.transform.position = new Vector3((wallSize * mapheight) / 2-2, 0, (mapwidth*wallSize));
+        OuterWallx2.transform.Rotate(new Vector3(0, 90, 0));
+        GameObject OuterWallz = Instantiate(Outerwallz) as GameObject;
+        OuterWallz.transform.position = new Vector3(0-wallSize, 0, (wallSize * mapwidth) / 2-2);
+        GameObject OuterWallz2 = Instantiate(Outerwallz) as GameObject;
+        OuterWallz2.transform.position = new Vector3(mapheight*wallSize, 0, (wallSize * mapheight) / 2 - 2);
+
         for (int i = 0; i < mapheight; i++)
         {
             for(int j = 0;j<mapwidth;j++)
             {
 
                 Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
-                GameObject Floor = Instantiate(floor) as GameObject;
+                
                 //Place floors
                 if (!(maze[i, j] == 1))
                 {
                     //Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
                     
-                    if (Floor != null)
-                    {
-                        Floor.transform.position = Floorpos;
-                    }
+
+                        switch (Random.Range(0,20))
+                        {
+                            case 1:
+                                    GameObject FloorTrap = Instantiate(Floortrap) as GameObject;
+                                    FloorTrap.transform.position = Floorpos;
+                                    break;
+                            default:
+                                GameObject Floor = Instantiate(floor) as GameObject;
+                                Floor.transform.position = Floorpos;
+                                break;
+                        }
+                        
+                    
                 }
 
                 if (maze[i, j] == 1)
                 {
                     Vector3 pos = new Vector3(i * wallSize, 0, j * wallSize);
-                    GameObject Wall = Instantiate(wall) as GameObject;
-                    GameObject Trap = Instantiate(trap) as GameObject;
                     
-                    if (Wall != null)
-                    {
+                    
                         //Randomly take out walls and replace with floors to create loops/multi paths
                         switch (Random.Range(0,20))
                         {
@@ -65,13 +93,18 @@ public class MazeGenerator : MonoBehaviour {
                                // if ((pos.x - Player1pos.x >= wallSize * 2) && (pos.z - Player1pos.z >= wallSize * 2))
                                 //{
 
-                                    
-                                    if (i == 0 || i == mapheight - 1 || j == 0 || j == mapwidth - 1)
-                                        Wall.transform.position = pos;
-                                    else
-                                    {
-                                        Floor.transform.position = Floorpos;
-                                    }
+
+                                if (i == 0 || i == mapheight - 1 || j == 0 || j == mapwidth - 1)
+                                {
+                                    GameObject Wall = Instantiate(wall) as GameObject;
+                                    Wall.transform.position = pos;
+
+                                }
+                                else
+                                {
+                                    GameObject Floor = Instantiate(floor) as GameObject;
+                                    Floor.transform.position = Floorpos;
+                                }
                                     
                                 //}
                                 break;
@@ -79,12 +112,18 @@ public class MazeGenerator : MonoBehaviour {
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
                                     //End position
+                                    GameObject Floor = Instantiate(floor) as GameObject;
                                     Floor.transform.position = Floorpos;
                                     End.transform.position = new Vector3((mapheight-2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
                                 else
                                 {
-                                    Trap.transform.position = pos;
+                                    GameObject WallTrap = Instantiate(Walltrap) as GameObject;
+                                    
+                                    WallTrap.transform.position = pos;
+
+                                    
+                                   
                                 }
                                     
                                 break;
@@ -94,11 +133,13 @@ public class MazeGenerator : MonoBehaviour {
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
                                     //End position
+                                    GameObject Floor = Instantiate(floor) as GameObject;
                                     Floor.transform.position = Floorpos;
                                     End.transform.position = new Vector3((mapheight - 2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
                                 else
                                 {
+                                    GameObject Wall = Instantiate(wall) as GameObject;
                                     Wall.transform.position = pos;
                                 }
                                
@@ -119,7 +160,6 @@ public class MazeGenerator : MonoBehaviour {
                         //        //Wall.transform.position = pos;
                         //        break;
                         //}                         
-                    }
                 }
             }
         }
