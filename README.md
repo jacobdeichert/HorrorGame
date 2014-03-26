@@ -9,9 +9,16 @@ This is the new base project folder that everyone should add their stuff too. If
 
 - networking/multiplayer [ADAM]
 - player character 3D model [RYAN]
-- menu system [...]
-- fatigue bar [JAKE]
-- health bar [JAKE]
-- fix trap rotation bugs [JAKE]
+- menu system [ERIC]
+- refine chat system [ODIN]
+- sound system [ODIN]
+- refine AI [ODIN & MATT]
+    - wander state
+        - randomly change target node
+        - based on 15-45 secs
+- torches on walls as breadcrumbs [MATT]
+- game HUD [JAKE]
+    - fatigue bar
+    - health bar
 
 
