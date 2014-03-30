@@ -8,8 +8,6 @@ public class Node : MonoBehaviour {
 	//path scores
 	public float g, h, f;
 	public int listIndex;
-	//materials
-	public Material green, red, black, blue;
 
 	// Use this for initialization
 	void Start () {
@@ -18,15 +16,7 @@ public class Node : MonoBehaviour {
 	
 	//used only to change the blocks colors
 	void Update () {
-		if (wall){
-			renderer.material = blue;
-		}
-		else{
-			renderer.material = green;
-		}
-		if (path){
-			renderer.material = red;
-		}
+
 	}
 	//calculates traversal values for a node
 	public void CalculateValues(Node _parent, Node _end){
