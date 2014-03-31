@@ -22,6 +22,8 @@ public class MazeGenerator : MonoBehaviour {
     private static System.Random rand = new System.Random();
     public bool hasCeiling = true;
 
+	private bool isSpawned;
+
 	// Use this for initialization
 	void Start () {
         maze = GenerateMaze(mapheight,mapwidth);
@@ -30,6 +32,19 @@ public class MazeGenerator : MonoBehaviour {
         end.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
+
+		// This will place the monster as close to centre as possible
+		do
+		{
+			Vector3 monsterPos = Vector3((mapwidth*wallSize)/2, 0, (mapheight*wallSize)/2);
+			/*
+			  if mapTile at monsterPos is !wallTile & !trapTile
+				instantiate monster here
+				isSpawned = true
+			*/
+		}
+		while(!isSpawned);
+
         //GameObject Player1 = Instantiate(player1) as GameObject;
         GameObject Player2 = Instantiate(player2) as GameObject;
        // Player1.transform.position = Player1pos;
