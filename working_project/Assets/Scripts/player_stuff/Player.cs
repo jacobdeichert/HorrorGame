@@ -4,7 +4,6 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public GUITexture guiHealthBarFill;
-    public GUIText infoText;
     private float health;
     private bool isAlive;
     private bool loweringHealth = false;
@@ -17,22 +16,14 @@ public class Player : MonoBehaviour
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
-        foreach (GUITexture t in textures) {
-            if (t.name == "health_bar_fill_gui") {
+        foreach (GUITexture t in textures)
+		{
+            if (t.name == "health_bar_fill_gui")
+			{
                 guiHealthBarFill = t;
                 break;
             }
         }
-
-        // find gui info text
-        GUIText[] texts = GameObject.FindObjectsOfType(typeof(GUIText)) as GUIText[];
-        foreach (GUIText t in texts) {
-            if (t.name == "info_text_gui") {
-                infoText = t;
-                break;
-            }
-        }
-        infoText.enabled = false;
 	}
 	
 
@@ -42,19 +33,13 @@ public class Player : MonoBehaviour
 
     void updateTorch() {
         RaycastHit hit;
-        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
-        Debug.DrawRay(camera.transform.position, camera.transform.forward);
-        if (Physics.Raycast(ray, out hit, 3.0f) && hit.collider.name == "Torch") {
-            infoText.text = "[V]  Light Torch";
-            infoText.enabled = true;
+        Ray ray = new Ray(camera.transform.position, camera.transform.forward * 2);
 
-            Torch t;
-            if ((t = hit.collider.gameObject.GetComponent<Torch>() as Torch) != null
-                && Input.GetKeyDown(KeyCode.V)) {
-                t.ToggleFlame();
-            }
-        } else {
-            infoText.enabled = false;
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * 2);
+
+        if (Physics.Raycast(ray, out hit) && hit.collider.name == "Torch")
+        {
+            Debug.Log("YES");
         }
     }
 

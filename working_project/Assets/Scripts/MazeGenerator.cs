@@ -7,6 +7,9 @@ public class MazeGenerator : MonoBehaviour {
     public int mapheight = 11;
     public int mapwidth = 11;
     private int[,] maze;
+    public int[,] Maze {
+        get { return maze; }
+    }
     public int wallSize = 1;
     public GameObject wall;
     public GameObject end;
