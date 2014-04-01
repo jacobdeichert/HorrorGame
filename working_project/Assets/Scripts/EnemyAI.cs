@@ -67,16 +67,40 @@ public class EnemyAI : MonoBehaviour
 		{
 		case EnemyState.idle: // This may not exist for much longer
 			animation.Play("Idle");
+			if (Input.GetKeyDown(KeyCode.P)){
+				enemyState = EnemyState.wander;
+			}
 			break;
 		case EnemyState.wander:
-			if (Input.GetKeyDown(KeyCode.P)){
-				pathFinder.ResetPath(Vector3.zero);
+			/*Vector3 target = Vector3.zero;
+			foreach (Node node in pathFinder.nodes){
+				if (!node.wall){
+					target = node.transform.position;
+				}
 			}
-            /*randomDis = transform.position - randomPos;
+			if (Input.GetKeyDown(KeyCode.P)){
+				pathFinder.ResetPath(target);
+			}*/
+            //randomDis = transform.position - randomPos;
 
             if (needNewPath)
             {
-                int index;
+				Vector3 target = Vector3.zero;
+
+				while (target == Vector3.zero){
+					int r = Random.Range(0, pathFinder.nodes.Count - 1);
+					if (!pathFinder.nodes[r].wall){
+						target = pathFinder.nodes[r].transform.position;
+					}
+				}
+				foreach (Node node in pathFinder.nodes){
+					if (!node.wall){
+						target = node.transform.position;
+					}
+					break;
+				}
+				pathFinder.ResetPath(target);
+                /*int index;
 
                 do
                 {
@@ -86,7 +110,7 @@ public class EnemyAI : MonoBehaviour
                 }
                 while (!pathFinder.nodes[index].path && randomDis.magnitude < MIN_RANDOM_PATH_DIS);
 
-                pathFinder.ResetPath(randomPos);
+                pathFinder.ResetPath(randomPos);*/
                 wanderTargetTimer = 0.0f;
                 BeginLerp();
                 needNewPath = false;
@@ -97,7 +121,7 @@ public class EnemyAI : MonoBehaviour
 
 			if(wanderTargetTimer > 30.0f || randomDis.magnitude < MIN_RANDOM_PATH_DIS)
                 needNewPath = true;         
-			*/
+
 			break;
 		case EnemyState.searchSlow:
 		case EnemyState.searchFast:
@@ -120,7 +144,6 @@ public class EnemyAI : MonoBehaviour
 
     void Move()
     {
-        Debug.Log("Here");
         elapsedTime += Time.deltaTime;
         if (elapsedTime > lerpTime)
             elapsedTime = lerpTime;
@@ -131,10 +154,14 @@ public class EnemyAI : MonoBehaviour
         {
             //lerp to next node
             pathFinder.path.RemoveAt(0);
-            if (pathFinder.path.Count > 0)
+            if (pathFinder.path.Count > 0){
                 BeginLerp();
-            else
+			}
+            else{
+				Debug.Log("arrived");
                 enemyState = EnemyState.idle;
+				needNewPath = true;
+			}
         }
         // transform.Translate(Vector3.forward * (moveSpeed * Time.deltaTime));
         transform.rotation = FaceTarget(false, chaseDirection);
@@ -149,7 +176,7 @@ public class EnemyAI : MonoBehaviour
         lerpTime = 0.2f;
         elapsedTime = 0.0f;
 
-        Debug.Log("Made it here");
+        //Debug.Log("Made it here");
     }
 
 	void OnHearSound(SoundSourceInfo sourceInfo)
