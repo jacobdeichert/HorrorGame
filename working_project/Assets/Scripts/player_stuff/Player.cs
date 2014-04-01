@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public GUITexture guiHealthBarFill;
-    public GUIText infoText;
+    private GUITexture guiHealthBarFill;
+    private GUIText infoText;
     private float health;
     private bool isAlive;
     private bool loweringHealth = false;
@@ -43,7 +43,6 @@ public class Player : MonoBehaviour
     void updateTorch() {
         RaycastHit hit;
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
-        Debug.DrawRay(camera.transform.position, camera.transform.forward);
         if (Physics.Raycast(ray, out hit, 3.0f) && hit.collider.name == "Torch") {
             infoText.text = "[V]  Light Torch";
             infoText.enabled = true;
