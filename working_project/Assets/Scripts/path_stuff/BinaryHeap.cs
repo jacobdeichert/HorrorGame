@@ -51,7 +51,7 @@ public class BinaryHeap {
 					//check if node has 2 children
 					if (cursor * 2 <= nodes.Count - 1 && cursor * 2 + 1 <= nodes.Count - 1){
 						//check if either child is smaller then parent
-						if (nodes[cursor].f >= nodes[cursor * 2].f || nodes[cursor].f >= nodes[cursor * 2 + 1].f){
+						if (nodes[cursor].F >= nodes[cursor * 2].F || nodes[cursor].F >= nodes[cursor * 2 + 1].F){
 							//TEST H VALUES WHEN TIE
 							if (TestNodes(nodes[cursor * 2], nodes[cursor * 2 + 1]) == 1){
 								//TEST FOR H VALUES WHEN THERE IS A TIE
@@ -109,15 +109,15 @@ public class BinaryHeap {
 		}
 	}
 	private int TestNodes(Node _parent, Node _child){
-		if (_parent.f == _child.f){
-			if (_parent.h <= _child.h){
+		if (_parent.F == _child.F){
+			if (_parent.H <= _child.H){
 				return 1;
 			}
 			else{
 				return -1;
 			}
 		}
-		else if (_parent.f < _child.f){
+		else if (_parent.F < _child.F){
 			return 1;
 		}
 		else{
