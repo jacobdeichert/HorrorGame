@@ -13,6 +13,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject floor;
    // public GameObject player1;
     public GameObject player2;
+	public GameObject monster;
+
     public GameObject Floortrap;
     public GameObject Walltrap;
     CrushingWallTrap setWall;
@@ -33,23 +35,32 @@ public class MazeGenerator : MonoBehaviour {
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
 
-
-		/*
-            Sorry Odin, I had to comment this out for now because it was an infinite loop and the game wouldn't run.
-            - Jake
-
-
-                // This will place the monster as close to centre as possible
-                do {
-        			Vector3 monsterPos = new Vector3((mapwidth*wallSize)/2, 0, (mapheight*wallSize)/2);
-
-        			  //if mapTile at monsterPos is !wallTile & !trapTile
-        				//instantiate monster here
-        				//isSpawned = true
-
-        		}
-        		while(!isSpawned);
-        */
+		// This will place the monster as close to centre as possible
+		Vector2 monsterSpawnPos = new Vector2(mapwidth/2, mapheight/2);
+		do
+		{
+			// I think a value of 0 denotes a floor tile, so we want him there
+			if(maze[(int)monsterSpawnPos.x,(int)monsterSpawnPos.y] == 0)
+			{
+				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, 0, monsterSpawnPos.y * wallSize), monster.transform.rotation);
+				//maze[monsterSpawnPos.x,monsterSpawnPos.y] = -1; // Do we want some way to signify what tile the monster ended up on?
+				isSpawned = true;
+			}
+			else
+			{
+				// This would potentially check every single node to catch a floor tile,
+				// just to make sure it's not left to chance.
+				monsterSpawnPos.x ++;
+				if(monsterSpawnPos.x > mapwidth)
+				{
+					monsterSpawnPos.x = 0;
+					monsterSpawnPos.y ++;
+					if(monsterSpawnPos.y > mapheight)
+						monsterSpawnPos.y = 0;
+				}
+			}
+		}
+		while(!isSpawned);
 
         //GameObject Player1 = Instantiate(player1) as GameObject;
         GameObject Player2 = Instantiate(player2) as GameObject;
@@ -57,7 +68,7 @@ public class MazeGenerator : MonoBehaviour {
         Player2.transform.position = Player2pos;
         //GameObject End = Instantiate(end) as GameObject;
 
-
+        
         // Create wall around the map
         Outerwallx.transform.localScale = new Vector3((1 * wallSize)*mapheight, 1 * wallSize, 1 * wallSize);
         Outerwallz.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, (1 * wallSize)*mapwidth);
@@ -78,12 +89,12 @@ public class MazeGenerator : MonoBehaviour {
             {
 
                 Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
-
+                
                 //Place floors
                 if (!(maze[i, j] == 1))
                 {
                     //Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
-
+                    
 
                         switch (Random.Range(0,20))
                         {
@@ -96,15 +107,15 @@ public class MazeGenerator : MonoBehaviour {
                                 Floor.transform.position = Floorpos;
                                 break;
                         }
-
-
+                        
+                    
                 }
 
                 if (maze[i, j] == 1)
                 {
                     Vector3 pos = new Vector3(i * wallSize, 0, j * wallSize);
-
-
+                    
+                    
                         //Randomly take out walls and replace with floors to create loops/multi paths
                         switch (Random.Range(0,20))
                         {
@@ -124,7 +135,7 @@ public class MazeGenerator : MonoBehaviour {
                                     GameObject Floor = Instantiate(floor) as GameObject;
                                     Floor.transform.position = Floorpos;
                                 }
-
+                                    
                                 //}
                                 break;
                             case 2:
@@ -138,17 +149,14 @@ public class MazeGenerator : MonoBehaviour {
                                 else
                                 {
                                     GameObject WallTrap = Instantiate(Walltrap) as GameObject;
-
+                                    
                                     WallTrap.transform.position = pos;
-
-
-
                                 }
-
+                                    
                                 break;
 
                             default:
-
+                                
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
                                     //End position
@@ -161,7 +169,7 @@ public class MazeGenerator : MonoBehaviour {
                                     GameObject Wall = Instantiate(wall) as GameObject;
                                     Wall.transform.position = pos;
                                 }
-
+                               
                                 break;
                         }
 
@@ -178,7 +186,7 @@ public class MazeGenerator : MonoBehaviour {
                         //    default:
                         //        //Wall.transform.position = pos;
                         //        break;
-                        //}
+                        //}                         
                 }
             }
         }

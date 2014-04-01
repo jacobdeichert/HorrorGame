@@ -1,21 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
     public GUITexture guiHealthBarFill;
     private float health;
     private bool isAlive;
     private bool loweringHealth = false;
 
-
-
-	void Start () {
+	void Start () 
+	{
         health = 100f;
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
-        foreach (GUITexture t in textures) {
-            if (t.name == "health_bar_fill_gui") {
+        foreach (GUITexture t in textures)
+		{
+            if (t.name == "health_bar_fill_gui")
+			{
                 guiHealthBarFill = t;
                 break;
             }
@@ -23,7 +25,8 @@ public class Player : MonoBehaviour {
 	}
 	
 
-	void Update () {
+	void Update ()
+	{
 	
 	}
 
