@@ -12,6 +12,11 @@ public class EnemyAI : MonoBehaviour
 
 	// PATH FINDING
 	PathFinder pathFinder;
+    // random selection while wandering
+    const float MIN_RANDOM_PATH_DIS = 5.0f;
+    Vector3 randomPos = new Vector3();
+    Vector3 randomDis = new Vector3();
+    bool needNewPath;
 
 	// MOVEMENT
 	const float TURNSPEED = 4.0f;
@@ -20,6 +25,10 @@ public class EnemyAI : MonoBehaviour
 
 	Vector3 chaseDirection;
 	float moveSpeed;
+
+    //lerp things
+    Vector2 lerpStart, lerpEnd, lerpDistance;
+    float lerpTime, elapsedTime;
 
 	// DETECTION
 	const float REDIRECTIONRADIUS = 5.0f;
@@ -39,12 +48,17 @@ public class EnemyAI : MonoBehaviour
 	void Start()
 	{
 		pathFinder = GetComponent<PathFinder>();
+        gameObject.AddComponent<PathGen>();
+		//need to set pathGen's nodeSize && mapSize
+		gameObject.GetComponent<PathGen>().nodeSize = 5;
+		gameObject.GetComponent<PathGen>().mapSize = 31;
 
-		enemyState = EnemyState.idle;
+        enemyState = EnemyState.wander;
+        needNewPath = true;
 		moveSpeed = 0.0f;
+
 		wanderTargetTimer = 2.0f;
-		
-		gameObject.AddComponent<PathGen>();
+        randomDis = randomPos = Vector3.zero;	
 	}
 
 	void Update ()
@@ -55,19 +69,41 @@ public class EnemyAI : MonoBehaviour
 			animation.Play("Idle");
 			break;
 		case EnemyState.wander:
-			if(wanderTargetTimer > 30.0f)
-			{
-				// ---------->  Set enemy to move towards random end locations after 15-45 seconds in this state  <-----------
-				wanderTargetTimer = 0.0f;
+			if (Input.GetKeyDown(KeyCode.P)){
+				pathFinder.ResetPath(Vector3.zero);
 			}
-			wanderTargetTimer += Time.deltaTime;
+            /*randomDis = transform.position - randomPos;
+
+            if (needNewPath)
+            {
+                int index;
+
+                do
+                {
+                    index = (int)((float)pathFinder.nodes.Count * Random.value);
+                    randomPos = pathFinder.nodes[index].transform.position;
+                    randomDis = randomPos - transform.position;
+                }
+                while (!pathFinder.nodes[index].path && randomDis.magnitude < MIN_RANDOM_PATH_DIS);
+
+                pathFinder.ResetPath(randomPos);
+                wanderTargetTimer = 0.0f;
+                BeginLerp();
+                needNewPath = false;
+            }
+
+            wanderTargetTimer += Time.deltaTime;
+            Move();
+
+			if(wanderTargetTimer > 30.0f || randomDis.magnitude < MIN_RANDOM_PATH_DIS)
+                needNewPath = true;         
+			*/
 			break;
 		case EnemyState.searchSlow:
 		case EnemyState.searchFast:
 		case EnemyState.chaseSlow:
 		case EnemyState.chaseFast:
-			transform.Translate(Vector3.forward * (moveSpeed*Time.deltaTime));
-			transform.rotation = FaceTarget(false, chaseDirection);
+            Move();
 			animation.CrossFade(animationName);
 			animation[animationName].speed = animationSpeed;
 			DetermineAttackRange();
@@ -81,6 +117,40 @@ public class EnemyAI : MonoBehaviour
 			break;
 		}
 	}
+
+    void Move()
+    {
+        Debug.Log("Here");
+        elapsedTime += Time.deltaTime;
+        if (elapsedTime > lerpTime)
+            elapsedTime = lerpTime;
+        transform.position = new Vector3((lerpStart.x + lerpDistance.x * (elapsedTime / lerpTime)),
+                                         transform.position.y,
+                                         (lerpStart.y + lerpDistance.y * (elapsedTime / lerpTime)));
+        if (elapsedTime == lerpTime)
+        {
+            //lerp to next node
+            pathFinder.path.RemoveAt(0);
+            if (pathFinder.path.Count > 0)
+                BeginLerp();
+            else
+                enemyState = EnemyState.idle;
+        }
+        // transform.Translate(Vector3.forward * (moveSpeed * Time.deltaTime));
+        transform.rotation = FaceTarget(false, chaseDirection);
+    }
+    private void BeginLerp()
+    {
+        lerpStart = new Vector2(transform.position.x, transform.position.z);
+        lerpEnd = new Vector2(pathFinder.path[0].transform.position.x, pathFinder.path[0].transform.position.z);
+
+        lerpDistance = lerpEnd - lerpStart;
+
+        lerpTime = 0.2f;
+        elapsedTime = 0.0f;
+
+        Debug.Log("Made it here");
+    }
 
 	void OnHearSound(SoundSourceInfo sourceInfo)
 	{

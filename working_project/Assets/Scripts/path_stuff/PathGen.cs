@@ -51,13 +51,13 @@ public class PathGen : MonoBehaviour {
 		while (!_end.isClosed && openList.Count != 0 && _start != null){
 			openList.Sort((x, y) => {
 				//if fs are equal check their h values
-				if (x.f == y.f){
-					if (x.h > y.h) return 1;
-					else if (x.h < y.h) return -1;
+				if (x.F == y.F){
+					if (x.H > y.H) return 1;
+					else if (x.H < y.H) return -1;
 					else return 0;
 				}
-				else if (x.f > y.f) return 1;
-				else if (x.f < y.f) return -1;
+				else if (x.F > y.F) return 1;
+				else if (x.F < y.F) return -1;
 				else return 0;}
 			);
 			//adds lowest node on openList to closedList
@@ -77,7 +77,7 @@ public class PathGen : MonoBehaviour {
 				if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 					//if on the openList simply update it's parent
 					if (_nodes[_index].isOpen){
-						if (_nodes[_index].parent.f > current.f){
+						if (_nodes[_index].parent.F > current.F){
 							_nodes[_index].parent = current;
 						}
 					}
@@ -96,7 +96,7 @@ public class PathGen : MonoBehaviour {
 			if (_index >= 0 && _index < _nodes.Count){
 				if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 					if (_nodes[_index].isOpen){
-						if (_nodes[_index].parent.f > current.f){
+						if (_nodes[_index].parent.F > current.F){
 							_nodes[_index].parent = current;
 						}
 					}
@@ -115,7 +115,7 @@ public class PathGen : MonoBehaviour {
 				if (_nodes[_index].transform.position.x == current.transform.position.x - nodeSize && _nodes[_index].transform.position.z == current.transform.position.z){
 					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 						if (_nodes[_index].isOpen){
-							if (_nodes[_index].parent.f > current.f){
+							if (_nodes[_index].parent.F > current.F){
 								_nodes[_index].parent = current;
 							}
 						}
@@ -135,7 +135,7 @@ public class PathGen : MonoBehaviour {
 				if (_nodes[_index].transform.position.x == current.transform.position.x + nodeSize && _nodes[_index].transform.position.z == current.transform.position.z){
 					if (!_nodes[_index].wall && !_nodes[_index].isClosed){
 						if (_nodes[_index].isOpen){
-							if (_nodes[_index].parent.f > current.f){
+							if (_nodes[_index].parent.F > current.F){
 								_nodes[_index].parent = current;
 							}
 						}
@@ -150,7 +150,7 @@ public class PathGen : MonoBehaviour {
 			}
 		}
 		//fills path
-		if (openList.Count != 0){
+		if (openList.Count != 0 && _start != null){
 			//adds the last node in the closedList aka the target/end
 			path.Add(closedList[closedList.Count - 1]);
 			current = closedList[closedList.Count - 1];
