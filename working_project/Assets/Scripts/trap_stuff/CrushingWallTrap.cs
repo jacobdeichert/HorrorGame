@@ -16,7 +16,6 @@ public class CrushingWallTrap : Trap {
             hasInvokedEnd = true;
             Invoke("end", 10f);
         }
-        Debug.DrawRay(transform.position + transform.up * -3, transform.forward);
 	}
 
 

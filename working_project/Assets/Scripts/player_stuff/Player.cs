@@ -7,10 +7,12 @@ public class Player : MonoBehaviour
     private float health;
     private bool isAlive;
     private bool loweringHealth = false;
+    private Camera camera;
 
 	void Start () 
 	{
         health = 100f;
+        camera = GetComponentInChildren<Camera>();
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
@@ -25,10 +27,21 @@ public class Player : MonoBehaviour
 	}
 	
 
-	void Update ()
-	{
-	
+	void Update () {
+        updateTorch();
 	}
+
+    void updateTorch() {
+        RaycastHit hit;
+        Ray ray = new Ray(camera.transform.position, camera.transform.forward * 2);
+
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * 2);
+
+        if (Physics.Raycast(ray, out hit) && hit.collider.name == "Torch")
+        {
+            Debug.Log("YES");
+        }
+    }
 
 
     void OnCollisionEnter(Collision c) {
