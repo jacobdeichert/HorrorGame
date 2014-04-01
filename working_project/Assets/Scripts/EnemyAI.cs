@@ -14,8 +14,8 @@ public class EnemyAI : MonoBehaviour
 	PathFinder pathFinder;
     // random selection while wandering
     const float MIN_RANDOM_PATH_DIS = 5.0f;
-    Vector3 randomPos = new Vector3();
-    Vector3 randomDis = new Vector3();
+    Vector3 target;
+    Vector3 distToTarget = new Vector3();
     bool needNewPath;
 
 	// MOVEMENT
@@ -58,7 +58,7 @@ public class EnemyAI : MonoBehaviour
 		moveSpeed = 0.0f;
 
 		wanderTargetTimer = 2.0f;
-        randomDis = randomPos = Vector3.zero;	
+        distToTarget = target = Vector3.zero;	
 	}
 
 	void Update ()
@@ -67,35 +67,28 @@ public class EnemyAI : MonoBehaviour
 		{
 		case EnemyState.idle: // This may not exist for much longer
 			animation.Play("Idle");
-			if (Input.GetKeyDown(KeyCode.P)){
+			if (Input.GetKeyDown(KeyCode.P))
 				enemyState = EnemyState.wander;
-			}
 			break;
 		case EnemyState.wander:
-            randomDis = transform.position - randomPos;
+            if (Input.GetKeyDown(KeyCode.P))
+                enemyState = EnemyState.idle;
+
+            distToTarget = transform.position - target;
 
             if (needNewPath)
             {
-				Vector3 target = Vector3.zero;
+				target = Vector3.zero;
 
-				while (target == Vector3.zero){
-					int r = Random.Range(0, pathFinder.nodes.Count - 1);
-					if (!pathFinder.nodes[r].wall){
-						target = pathFinder.nodes[r].transform.position;
+				while (target == Vector3.zero)
+                {
+                    int randIndex = Random.Range(0, pathFinder.nodes.Count - 1);
+                    if (!pathFinder.nodes[randIndex].wall)
+                    {
+                        target = pathFinder.nodes[randIndex].transform.position;
 					}
 				}
 				pathFinder.ResetPath(target);
-                /*int index;
-
-                do
-                {
-                    index = (int)((float)pathFinder.nodes.Count * Random.value);
-                    randomPos = pathFinder.nodes[index].transform.position;
-                    randomDis = randomPos - transform.position;
-                }
-                while (!pathFinder.nodes[index].path && randomDis.magnitude < MIN_RANDOM_PATH_DIS);
-
-                pathFinder.ResetPath(randomPos);*/
                 wanderTargetTimer = 0.0f;
                 BeginLerp();
                 needNewPath = false;
@@ -104,7 +97,7 @@ public class EnemyAI : MonoBehaviour
             wanderTargetTimer += Time.deltaTime;
             Move();
 
-			if(wanderTargetTimer > 30.0f || randomDis.magnitude < MIN_RANDOM_PATH_DIS)
+			if(wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS)
                 needNewPath = true;         
 
 			break;
@@ -139,12 +132,13 @@ public class EnemyAI : MonoBehaviour
         {
             //lerp to next node
             pathFinder.path.RemoveAt(0);
-            if (pathFinder.path.Count > 0){
+            if (pathFinder.path.Count > 0)
+            {
                 BeginLerp();
 			}
-            else{
+            else
+            {
 				Debug.Log("arrived");
-                enemyState = EnemyState.idle;
 				needNewPath = true;
 			}
         }
@@ -160,8 +154,6 @@ public class EnemyAI : MonoBehaviour
 
         lerpTime = 0.2f;
         elapsedTime = 0.0f;
-
-        //Debug.Log("Made it here");
     }
 
 	void OnHearSound(SoundSourceInfo sourceInfo)
