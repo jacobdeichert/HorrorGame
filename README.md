@@ -20,14 +20,18 @@ This is the new base project folder that everyone should add their stuff too. If
 - player character 3D model [RYAN]
 - menu system [ERIC]
 - refine chat system [ODIN]
-- sound system [ODIN]
+- sound system [ODIN & RYAN]
 - refine AI [ODIN & MATT]
     - wander state
         - randomly change target node
         - based on 15-45 secs
 - torches on walls as breadcrumbs [MATT]
 - game HUD [JAKE]
-    - fatigue bar
+    - health indicator
+    - fatigue indicator
+- player/object interaction [JAKE]
+    - turn on torches
+
 
 
 
