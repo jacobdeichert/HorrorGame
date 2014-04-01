@@ -6,22 +6,18 @@ public class Node : MonoBehaviour {
 	public bool wall, path, isOpen, isClosed;
 	public Node parent;
 	//path scores
-	private float g, h, f;
-
-    public float G {
-        get { return g; }
-    }
-    public float H
-    {
-        get { return h; }
-    }
-    public float F
-    {
-        get { return f; }
-    }
-
+	public float g, h, f;
 	public int listIndex;
 
+	// Use this for initialization
+	void Start () {
+
+	}
+	
+	//used only to change the blocks colors
+	void Update () {
+
+	}
 	//calculates traversal values for a node
 	public void CalculateValues(Node _parent, Node _end){
 		float x, z;
