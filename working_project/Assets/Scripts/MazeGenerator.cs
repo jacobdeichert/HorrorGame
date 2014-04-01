@@ -13,6 +13,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject floor;
    // public GameObject player1;
     public GameObject player2;
+	public GameObject monster;
+
     public GameObject Floortrap;
     public GameObject Walltrap;
     CrushingWallTrap setWall;
@@ -34,16 +36,45 @@ public class MazeGenerator : MonoBehaviour {
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
 
 		// This will place the monster as close to centre as possible
+
+		Vector2 monsterSpawnPos = new Vector2(mapwidth/2, mapheight/2);
 		do
 		{
-			Vector3 monsterPos = Vector3((mapwidth*wallSize)/2, 0, (mapheight*wallSize)/2);
+			// I think a value of 0 denotes a floor tile, so we want him there
+			if(maze[(int)monsterSpawnPos.x,(int)monsterSpawnPos.y] == 0)
+			{
+				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, 0, monsterSpawnPos.y * wallSize), monster.transform.rotation);
+				//maze[monsterSpawnPos.x,monsterSpawnPos.y] = -1; // Do we want some way to signify what tile the monster ended up on?
+				isSpawned = true;
+			}
+			else
+			{
+				// This would potentially check every single node to catch a floor tile,
+				// just to make sure it's not left to chance.
+				monsterSpawnPos.x ++;
+				if(monsterSpawnPos.x > mapwidth)
+				{
+					monsterSpawnPos.x = 0;
+					monsterSpawnPos.y ++;
+					if(monsterSpawnPos.y > mapheight)
+						monsterSpawnPos.y = 0;
+				}
+			}
 			/*
+			Vector3 monsterPos = Vector3((mapwidth*wallSize)/2, 0, (mapheight*wallSize)/2);
+
 			  if mapTile at monsterPos is !wallTile & !trapTile
 				instantiate monster here
-				isSpawned = true
 			*/
+
 		}
 		while(!isSpawned);
+
+
+		Debug.Log(maze);
+		for (int i = 0; i < mapheight; i++)
+			for(int j = 0;j<mapwidth;j++)
+				Debug.Log(maze[i,j]);
 
         //GameObject Player1 = Instantiate(player1) as GameObject;
         GameObject Player2 = Instantiate(player2) as GameObject;
@@ -134,9 +165,6 @@ public class MazeGenerator : MonoBehaviour {
                                     GameObject WallTrap = Instantiate(Walltrap) as GameObject;
                                     
                                     WallTrap.transform.position = pos;
-
-                                    
-                                   
                                 }
                                     
                                 break;
