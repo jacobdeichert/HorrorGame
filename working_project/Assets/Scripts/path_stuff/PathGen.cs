@@ -150,7 +150,7 @@ public class PathGen : MonoBehaviour {
 			}
 		}
 		//fills path
-		if (openList.Count != 0){
+		if (openList.Count != 0 && _start != null){
 			//adds the last node in the closedList aka the target/end
 			path.Add(closedList[closedList.Count - 1]);
 			current = closedList[closedList.Count - 1];

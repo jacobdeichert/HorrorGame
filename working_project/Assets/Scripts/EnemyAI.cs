@@ -49,6 +49,9 @@ public class EnemyAI : MonoBehaviour
 	{
 		pathFinder = GetComponent<PathFinder>();
         gameObject.AddComponent<PathGen>();
+		//need to set pathGen's nodeSize && mapSize
+		gameObject.GetComponent<PathGen>().nodeSize = 5;
+		gameObject.GetComponent<PathGen>().mapSize = 31;
 
         enemyState = EnemyState.wander;
         needNewPath = true;
@@ -66,7 +69,10 @@ public class EnemyAI : MonoBehaviour
 			animation.Play("Idle");
 			break;
 		case EnemyState.wander:
-            randomDis = transform.position - randomPos;
+			if (Input.GetKeyDown(KeyCode.P)){
+				pathFinder.ResetPath(Vector3.zero);
+			}
+            /*randomDis = transform.position - randomPos;
 
             if (needNewPath)
             {
@@ -91,7 +97,7 @@ public class EnemyAI : MonoBehaviour
 
 			if(wanderTargetTimer > 30.0f || randomDis.magnitude < MIN_RANDOM_PATH_DIS)
                 needNewPath = true;         
-			
+			*/
 			break;
 		case EnemyState.searchSlow:
 		case EnemyState.searchFast:
