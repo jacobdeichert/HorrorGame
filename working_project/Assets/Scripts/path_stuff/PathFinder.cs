@@ -25,22 +25,12 @@ public class PathFinder : MonoBehaviour
 			node.path = false;
 			node.parent = null;
 
-			/*if (node.transform.position.x - _nodeSize / 2 < startPos.x && node.transform.position.x + _nodeSize / 2 > startPos.x &&
+			if (node.transform.position.x - _nodeSize / 2 < startPos.x && node.transform.position.x + _nodeSize / 2 > startPos.x &&
 			    node.transform.position.z - _nodeSize / 2 < startPos.y && node.transform.position.z + _nodeSize / 2 > startPos.y){
-				Debug.Log("start node found");
-				startNode = node;
-			}*/
-			if (node.transform.position == new Vector3(75, -5, 75)){
-				Debug.Log("temp start found");
 				startNode = node;
 			}
-			/*if (node.transform.position.x - _nodeSize / 2 < endPos.x && node.transform.position.x + _nodeSize / 2 > endPos.x &&
+			if (node.transform.position.x - _nodeSize / 2 < endPos.x && node.transform.position.x + _nodeSize / 2 > endPos.x &&
 			    node.transform.position.z - _nodeSize / 2 < endPos.y && node.transform.position.z + _nodeSize / 2 > endPos.y){
-				Debug.Log("end node found");
-				endNode = node;
-			}*/
-			if (node.transform.position == new Vector3(145, -5, 150)){
-				Debug.Log("temp end found");
 				endNode = node;
 			}
 		}
@@ -49,8 +39,7 @@ public class PathFinder : MonoBehaviour
 		}
 		if (path.Count > 0)
 			foreach (Node node in path){
-				Debug.Log(node.transform.position);
-				node.path = true; //sets nodes path true to change it's color
+				node.path = true; //don't think we need this anymore
 			}
         else
             Debug.Log("No path.");

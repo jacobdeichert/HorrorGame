@@ -72,16 +72,7 @@ public class EnemyAI : MonoBehaviour
 			}
 			break;
 		case EnemyState.wander:
-			/*Vector3 target = Vector3.zero;
-			foreach (Node node in pathFinder.nodes){
-				if (!node.wall){
-					target = node.transform.position;
-				}
-			}
-			if (Input.GetKeyDown(KeyCode.P)){
-				pathFinder.ResetPath(target);
-			}*/
-            //randomDis = transform.position - randomPos;
+            randomDis = transform.position - randomPos;
 
             if (needNewPath)
             {
@@ -92,12 +83,6 @@ public class EnemyAI : MonoBehaviour
 					if (!pathFinder.nodes[r].wall){
 						target = pathFinder.nodes[r].transform.position;
 					}
-				}
-				foreach (Node node in pathFinder.nodes){
-					if (!node.wall){
-						target = node.transform.position;
-					}
-					break;
 				}
 				pathFinder.ResetPath(target);
                 /*int index;
@@ -164,7 +149,7 @@ public class EnemyAI : MonoBehaviour
 			}
         }
         // transform.Translate(Vector3.forward * (moveSpeed * Time.deltaTime));
-        transform.rotation = FaceTarget(false, chaseDirection);
+        //transform.rotation = FaceTarget(false, chaseDirection);
     }
     private void BeginLerp()
     {
