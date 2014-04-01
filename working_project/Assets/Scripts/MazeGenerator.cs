@@ -36,7 +36,6 @@ public class MazeGenerator : MonoBehaviour {
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
 
 		// This will place the monster as close to centre as possible
-
 		Vector2 monsterSpawnPos = new Vector2(mapwidth/2, mapheight/2);
 		do
 		{
@@ -60,21 +59,8 @@ public class MazeGenerator : MonoBehaviour {
 						monsterSpawnPos.y = 0;
 				}
 			}
-			/*
-			Vector3 monsterPos = Vector3((mapwidth*wallSize)/2, 0, (mapheight*wallSize)/2);
-
-			  if mapTile at monsterPos is !wallTile & !trapTile
-				instantiate monster here
-			*/
-
 		}
 		while(!isSpawned);
-
-
-		Debug.Log(maze);
-		for (int i = 0; i < mapheight; i++)
-			for(int j = 0;j<mapwidth;j++)
-				Debug.Log(maze[i,j]);
 
         //GameObject Player1 = Instantiate(player1) as GameObject;
         GameObject Player2 = Instantiate(player2) as GameObject;
