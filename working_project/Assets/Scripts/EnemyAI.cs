@@ -71,6 +71,7 @@ public class EnemyAI : MonoBehaviour
 				enemyState = EnemyState.wander;
 			break;
 		case EnemyState.wander:
+			animation.Play("Run");
             if (Input.GetKeyDown(KeyCode.P))
                 enemyState = EnemyState.idle;
 
@@ -97,8 +98,9 @@ public class EnemyAI : MonoBehaviour
             wanderTargetTimer += Time.deltaTime;
             Move();
 
-			if(wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS)
-                needNewPath = true;         
+			if(wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS){
+                //needNewPath = true;
+			}
 
 			break;
 		case EnemyState.searchSlow:
@@ -149,10 +151,12 @@ public class EnemyAI : MonoBehaviour
     {
         lerpStart = new Vector2(transform.position.x, transform.position.z);
         lerpEnd = new Vector2(pathFinder.path[0].transform.position.x, pathFinder.path[0].transform.position.z);
+		//faces enemy towards next node
+		transform.LookAt(new Vector3(lerpEnd.x, transform.position.y, lerpEnd.y));
 
         lerpDistance = lerpEnd - lerpStart;
 
-        lerpTime = 0.2f;
+        lerpTime = 0.3f;
         elapsedTime = 0.0f;
     }
 

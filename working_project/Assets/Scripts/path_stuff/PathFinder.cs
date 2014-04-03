@@ -37,10 +37,11 @@ public class PathFinder : MonoBehaviour
 		if (startNode && endNode){
 			path = gameObject.GetComponent<PathGen>().CalculatePath(startNode, endNode, nodes);
 		}
-		if (path.Count > 0)
-			foreach (Node node in path){
+		if (path.Count > 0){
+			/*foreach (Node node in path){
 				node.path = true; //don't think we need this anymore
-			}
+			}*/
+		}
         else
             Debug.Log("No path.");
 	}
