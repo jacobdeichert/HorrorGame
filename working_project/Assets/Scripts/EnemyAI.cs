@@ -50,8 +50,8 @@ public class EnemyAI : MonoBehaviour
 		pathFinder = GetComponent<PathFinder>();
         gameObject.AddComponent<PathGen>();
 		//need to set pathGen's nodeSize && mapSize
-		gameObject.GetComponent<PathGen>().nodeSize = 5;
-		gameObject.GetComponent<PathGen>().mapSize = 31;
+		gameObject.GetComponent<PathGen>().nodeSize = GameObject.Find("MazeGenerator").GetComponent<MazeGenerator>().wallSize;
+		gameObject.GetComponent<PathGen>().mapSize = GameObject.Find("MazeGenerator").GetComponent<MazeGenerator>().mapwidth;
 
         enemyState = EnemyState.wander;
         needNewPath = true;
