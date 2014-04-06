@@ -7,11 +7,9 @@ public class Player : MonoBehaviour
     private GUIText infoText;
     private float health;
     private bool isAlive;
-    private bool loweringHealth = false;
     private Camera camera;
 
-	void Start () 
-	{
+	void Start () {
         health = 100f;
         camera = GetComponentInChildren<Camera>();
 
@@ -36,9 +34,12 @@ public class Player : MonoBehaviour
 	}
 	
 
+
 	void Update () {
         updateTorch();
 	}
+
+
 
     void updateTorch() {
         RaycastHit hit;
@@ -58,38 +59,8 @@ public class Player : MonoBehaviour
     }
 
 
-    void OnCollisionEnter(Collision c) {
-        // touching trap
-        TrapDamage t;
-        if ((t = c.collider.GetComponent<TrapDamage>() as TrapDamage) != null) {
-            if (!loweringHealth) {
-                loweringHealth = true;
-                StartCoroutine(decreaseHealthPerSecondRepeat(t.damagePerSecond, 1f));
-            }
-        }
-        
-        // touching monster
-        //else if ((Monster)(c.collider.GetComponent<Monster>())) {
 
-        //}
-    }
-
-
-
-    void OnCollisionExit(Collision c) {
-        if ((TrapDamage)(c.collider.GetComponent<TrapDamage>())) {
-            loweringHealth = false;
-        }
-    }
-
-    IEnumerator decreaseHealthPerSecondRepeat(float damageAmount, float repeatRate) {
-        while(loweringHealth) {
-            decreaseHealth(damageAmount);
-            yield return new WaitForSeconds(repeatRate);
-        }
-    }
-
-    void decreaseHealth(float damageAmount) {
+    public void decreaseHealth(float damageAmount) {
         health -= damageAmount;
         // calc new x position of health bar fill texture
         float newX = -(guiHealthBarFill.pixelInset.width - guiHealthBarFill.pixelInset.width * (health / 100));

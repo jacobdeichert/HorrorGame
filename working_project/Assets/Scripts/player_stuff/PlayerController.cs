@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour {
 	public float gravity;
 	public float jumpHeight;
 	public bool canJump;
-	bool isRunning = false;
-	bool isGrounded = false;
+	private bool isRunning = false;
+    private bool isGrounded = false;
 
 	void Awake () {
 		rigidbody.freezeRotation = true;
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
         RaycastHit hit;
         Ray ray = new Ray(transform.position - new Vector3(0, 0.9f, 0), -transform.up);
         // if there is something directly below the player
-        if (Physics.Raycast(ray, out hit, 0.2f)) {
+        if (Physics.Raycast(ray, out hit, 0.12f)) {
             isGrounded = true;
         }
 	}

@@ -10,4 +10,34 @@ public class TrapDamage : MonoBehaviour {
      */
 
     public float damagePerSecond;
+    private bool isTouchingPlayer = false;
+    private Player playerToDamage;
+
+
+    public void OnCollisionEnter(Collision c) {
+        // touching player
+        Player testPlayer;
+        if ((testPlayer = c.collider.GetComponent<Player>() as Player) != null) {
+            playerToDamage = testPlayer;
+            if (!isTouchingPlayer) {
+                isTouchingPlayer = true;
+                // start the coroutine that lowers the player's health once per second
+                StartCoroutine(decreaseHealthPerSecondRepeat(1f));
+            }
+        }
+    }
+
+    void OnCollisionExit(Collision c) {
+        // stopped touching player
+        if ((Player)(c.collider.GetComponent<Player>())) {
+            isTouchingPlayer = false;
+        }
+    }
+
+    public IEnumerator decreaseHealthPerSecondRepeat(float repeatRate) {
+        while (isTouchingPlayer) {
+            playerToDamage.decreaseHealth(damagePerSecond);
+            yield return new WaitForSeconds(repeatRate);
+        }
+    }
 }
