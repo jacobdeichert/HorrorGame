@@ -45,12 +45,12 @@ public class Player : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
         if (Physics.Raycast(ray, out hit, 3.0f) && hit.collider.name == "Torch") {
-            infoText.text = "[V]  Light Torch";
+            infoText.text = "[LEFT CLICK]  Light Torch";
             infoText.enabled = true;
 
             Torch t;
             if ((t = hit.collider.gameObject.GetComponent<Torch>() as Torch) != null
-                && Input.GetKeyDown(KeyCode.V)) {
+                && Input.GetButtonDown("Action")) {
                 t.ToggleFlame();
             }
         } else {

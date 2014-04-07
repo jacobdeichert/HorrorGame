@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
         checkGrounded();
 
         // check if the player is running
-		if (isGrounded && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) {
+		if (isGrounded && Input.GetButtonDown("Sprint")) {
 			isRunning = true;
 		}
 		
