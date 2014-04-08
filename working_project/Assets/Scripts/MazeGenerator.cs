@@ -10,9 +10,10 @@ public class MazeGenerator : MonoBehaviour {
     public int[,] Maze {
         get { return maze; }
     }
-    public int wallSize = 1;
+    public float wallSize = 1.0f;
     public GameObject wall;
     public GameObject end;
+    public GameObject ceiling;
     public GameObject floor;
    // public GameObject player1;
     public GameObject player2;
@@ -34,6 +35,7 @@ public class MazeGenerator : MonoBehaviour {
         maze = GenerateMaze(mapheight,mapwidth);
         wall.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         floor.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
+        ceiling.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         end.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
@@ -45,7 +47,7 @@ public class MazeGenerator : MonoBehaviour {
 			// I think a value of 0 denotes a floor tile, so we want him there
 			if(maze[(int)monsterSpawnPos.x,(int)monsterSpawnPos.y] == 0)
 			{
-				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, -2, monsterSpawnPos.y * wallSize), monster.transform.rotation);
+				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, 0, monsterSpawnPos.y * wallSize), monster.transform.rotation);
 				//maze[monsterSpawnPos.x,monsterSpawnPos.y] = -1; // Do we want some way to signify what tile the monster ended up on?
 				isSpawned = true;
 			}
@@ -92,7 +94,12 @@ public class MazeGenerator : MonoBehaviour {
             {
 
                 Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
-                
+                if (hasCeiling)
+                {
+                    Vector3 ceilingPos = new Vector3(i * wallSize, 0.0f + (wallSize/2), j * wallSize);
+                    GameObject Ceiling = Instantiate(ceiling) as GameObject;
+                    Ceiling.transform.position = ceilingPos;
+                }
                 //Place floors
                 if (!(maze[i, j] == 1))
                 {
@@ -110,6 +117,7 @@ public class MazeGenerator : MonoBehaviour {
                                 Floor.transform.position = Floorpos;
                                 break;
                         }
+
                         
                     
                 }
