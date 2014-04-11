@@ -18,6 +18,8 @@ public class EnemyAI : MonoBehaviour
     Vector3 distToTarget = new Vector3();
     bool needNewPath;
 
+	GameObject playerTarget = null;
+
 	// MOVEMENT
 	const float TURNSPEED = 4.0f;
 	float wanderTargetTimer = 0.0f;
@@ -97,6 +99,8 @@ public class EnemyAI : MonoBehaviour
 
             wanderTargetTimer += Time.deltaTime;
             Move();
+			//check if any players are visible
+			SearchForPlayers();
 
 			if(wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS){
                 //needNewPath = true;
@@ -105,12 +109,39 @@ public class EnemyAI : MonoBehaviour
 			break;
 		case EnemyState.searchSlow:
 		case EnemyState.searchFast:
-		case EnemyState.chaseSlow:
-		case EnemyState.chaseFast:
-            Move();
+			//if enemy heard a sound
+			Move();
 			animation.CrossFade(animationName);
 			animation[animationName].speed = animationSpeed;
 			DetermineAttackRange();
+			break;
+		case EnemyState.chaseSlow:
+		case EnemyState.chaseFast:
+			//if enemy has a target
+			if (playerTarget != null){
+				//path towards target player
+				pathFinder.ResetPath(playerTarget.transform.position);
+				//if player gets to far away set to wander
+				if (pathFinder.path.Count > 15){
+					playerTarget = null;
+					enemyState = EnemyState.wander;
+					needNewPath = true;
+				}
+				//if enemy in range attack
+				else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5 || pathFinder.path.Count <= 1){
+					enemyState = EnemyState.fight;
+					isAttacking = true;
+				}
+				else{
+					animation.Play("Run");
+					Move();
+				}
+			}
+			//if playerTarget is for some reason null start to wander
+			else{
+				enemyState = EnemyState.wander;
+				needNewPath = true;
+			}
 			break;
 		case EnemyState.fight:
 			animation.CrossFade("Slam");
@@ -133,14 +164,21 @@ public class EnemyAI : MonoBehaviour
         if (elapsedTime == lerpTime)
         {
             //lerp to next node
-            pathFinder.path.RemoveAt(0);
-            if (pathFinder.path.Count > 0)
-            {
-                BeginLerp();
+			if (pathFinder.path.Count > 0){
+	            pathFinder.path.RemoveAt(0);
+	            if (pathFinder.path.Count > 0)
+	            {
+	                BeginLerp();
+				}
+	            else
+	            {
+					Debug.Log("arrived");
+					enemyState = EnemyState.wander;
+					needNewPath = true;
+				}
 			}
-            else
-            {
-				Debug.Log("arrived");
+			//if new path is 0 need new path
+			else{
 				needNewPath = true;
 			}
         }
@@ -156,7 +194,7 @@ public class EnemyAI : MonoBehaviour
 
         lerpDistance = lerpEnd - lerpStart;
 
-        lerpTime = 0.3f;
+        lerpTime = 0.4f;
         elapsedTime = 0.0f;
     }
 
@@ -165,15 +203,16 @@ public class EnemyAI : MonoBehaviour
 		// DETECT SOUND
 		chaseDirection  = sourceInfo.transform.position - transform.position;
 		float audioSourceDistance = chaseDirection.magnitude;
-		
-		// Volume is increased 100 fold for ease of use with distance.
-		// Distance is subtracted to resemble the monster's perception of the source's volume, making volume decay linearly, which might be inaccurate.
-		float audioSourceRelativeVolume = (sourceInfo.volume * 100) - audioSourceDistance;
-		chaseDirection.Normalize();
-		
+
 		// PATH FINDING
 		pathFinder.ResetPath(sourceInfo.transform.position);
+		BeginLerp();
 
+		// Volume is increased 100 fold for ease of use with distance.
+		// Distance is subtracted to resemble the monster's perception of the source's volume, making volume decay linearly, which might be inaccurate.
+		//float audioSourceRelativeVolume = (sourceInfo.volume * 100) - audioSourceDistance;
+		float audioSourceRelativeVolume = (sourceInfo.volume * 100) - pathFinder.path.Count;
+		chaseDirection.Normalize();
 
 		// DETERMINE RESPONSE LEVEL
 		if(audioSourceRelativeVolume < 0)
@@ -201,9 +240,9 @@ public class EnemyAI : MonoBehaviour
 			enemyState = EnemyState.searchFast;
 			moveSpeed = 4.0f;
 			animationSpeed = 0.9f;
-			animationName = "Walk";
+			animationName = "Run";
 		}
-		else if(audioSourceRelativeVolume > 59 && audioSourceRelativeVolume < 80)
+		/*else if(audioSourceRelativeVolume > 59 && audioSourceRelativeVolume < 80)
 		{
 			enemyState = EnemyState.chaseSlow;
 			moveSpeed = 5.0f;
@@ -216,7 +255,7 @@ public class EnemyAI : MonoBehaviour
 			moveSpeed = 6.0f;
 			animationSpeed = 0.9f;
 			animationName = "Run";
-		}
+		}*/
 	}
 
 	void OnTriggerStay(Collider c)  // <------- These refer to the player being in a particularly close proximity, and might need to be deleted/changed
@@ -284,5 +323,26 @@ public class EnemyAI : MonoBehaviour
         }
         if(isAttacking == false)
 			enemyState = EnemyState.chaseSlow;
+	}
+	void SearchForPlayers(){
+		int maxRange = 70;
+		RaycastHit hit;
+		//if player is visible player is set to current target
+		foreach (Player player in GameObject.FindObjectsOfType<Player>()){
+			//only raycast if player in within range
+			if(Vector3.Distance(transform.position, player.transform.position) < maxRange ){
+				//if in range raycast
+				if(Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, maxRange)){
+					//if raycast hits player
+					if(hit.transform == player.transform){
+						Debug.Log("player targeted.");
+						playerTarget = player.gameObject;
+						enemyState = EnemyState.chaseFast;
+						//for now break, but we may have to take into account both players at once
+						break;
+					}
+				}
+			}
+		}
 	}
 }

@@ -45,7 +45,7 @@ public class MazeGenerator : MonoBehaviour {
 			// I think a value of 0 denotes a floor tile, so we want him there
 			if(maze[(int)monsterSpawnPos.x,(int)monsterSpawnPos.y] == 0)
 			{
-				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, -2, monsterSpawnPos.y * wallSize), monster.transform.rotation);
+				Instantiate(monster, new Vector3(monsterSpawnPos.x * wallSize, -2.5f, monsterSpawnPos.y * wallSize), monster.transform.rotation);
 				//maze[monsterSpawnPos.x,monsterSpawnPos.y] = -1; // Do we want some way to signify what tile the monster ended up on?
 				isSpawned = true;
 			}
