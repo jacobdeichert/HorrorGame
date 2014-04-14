@@ -15,6 +15,11 @@ public class PlayerController : MonoBehaviour {
 	private bool isRunning = false;
     private bool isGrounded = false;
 
+    public bool IsRunning
+    {
+        get { return isRunning; }
+    }
+
 	void Awake () {
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;

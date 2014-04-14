@@ -9,7 +9,6 @@ public struct SoundSourceInfo
 public class AudioOutputToEnemy : MonoBehaviour
 {
 	SoundSourceInfo soundInfo;
-
 	GameObject monster;
 
 	void Start ()
@@ -19,7 +18,7 @@ public class AudioOutputToEnemy : MonoBehaviour
 
 	void Update ()
 	{
-		if(audio.isPlaying)
+		if(audio.isPlaying && audio.name != "ambience")
 		{
 			soundInfo.transform = transform;
 			soundInfo.volume = audio.volume;
