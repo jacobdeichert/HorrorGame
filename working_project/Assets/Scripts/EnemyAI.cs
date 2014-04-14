@@ -3,8 +3,8 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-	enum EnemyState { idle, wander, searchSlow, searchFast, chaseSlow, chaseFast, fight, shoot, dead }
-	EnemyState enemyState;
+	public enum EnemyState { idle, wander, searchSlow, searchFast, chaseSlow, chaseFast, fight, shoot, dead }
+	public EnemyState enemyState;
 
 	// ANIMATION
 	float animationSpeed;
