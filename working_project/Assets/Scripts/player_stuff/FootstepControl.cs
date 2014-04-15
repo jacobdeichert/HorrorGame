@@ -17,7 +17,7 @@ public class FootstepControl : MonoBehaviour
         {
             if (!audio.isPlaying)
             {
-                //audio.Play();
+               //audio.Play();
             }
 
             //Debug.Log("FootStepControl: should make footsteps");
