@@ -13,7 +13,7 @@ public class EnemyAI : MonoBehaviour
 	// PATH FINDING
 	PathFinder pathFinder;
     // random selection while wandering
-    const float MIN_RANDOM_PATH_DIS = 5.0f;
+    const float MIN_RANDOM_PATH_DIS = 0.5f;
     Vector3 target;
     Vector3 distToTarget = new Vector3();
     bool needNewPath;
@@ -114,9 +114,10 @@ public class EnemyAI : MonoBehaviour
 		case EnemyState.searchFast:
 			//if enemy heard a sound
 			Move();
+			SearchForPlayers();
 			animation.CrossFade(animationName);
 			animation[animationName].speed = animationSpeed;
-			DetermineAttackRange();
+			//DetermineAttackRange();
 			break;
 		case EnemyState.chaseSlow:
 		case EnemyState.chaseFast:
@@ -136,7 +137,7 @@ public class EnemyAI : MonoBehaviour
 					pathReset = 0.0f;
 				}
 				//if enemy in range attack
-				else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5 || pathFinder.path.Count <= 1){
+				else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5){
 					enemyState = EnemyState.fight;
 					//isAttacking = true;
 				}
@@ -152,8 +153,11 @@ public class EnemyAI : MonoBehaviour
 			}
 			break;
 		case EnemyState.fight:
+			//DetermineAttackRange();
 			animation.CrossFade("Slam");
-			DetermineAttackRange();
+			if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5){
+				enemyState = EnemyState.chaseFast;
+			}
 			break;
 		case EnemyState.dead:
 			// StartCoroutine("EnemyDeath");
@@ -214,7 +218,7 @@ public class EnemyAI : MonoBehaviour
 
 		// PATH FINDING
 		pathFinder.ResetPath(sourceInfo.transform.position);
-		BeginLerp();
+		//BeginLerp();
 
 		// Volume is increased 100 fold for ease of use with distance.
 		// Distance is subtracted to resemble the monster's perception of the source's volume, making volume decay linearly, which might be inaccurate.
@@ -225,34 +229,42 @@ public class EnemyAI : MonoBehaviour
 		// DETERMINE RESPONSE LEVEL
 		if(audioSourceRelativeVolume < 0)
 		{
-			/*enemyState = EnemyState.wander;
+			Debug.Log("sound < 0");
+			enemyState = EnemyState.wander;
+			needNewPath = true;
 			lerpSpeed = 0.5f;
 			moveSpeed = 0.0f;
-			animationSpeed = 0.5f;*/
+			animationSpeed = 0.5f;
 		}
-		else if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
+		else if(audioSourceRelativeVolume < 20)
 		{
+			Debug.Log("sound < 10");
 			enemyState = EnemyState.wander;
+			needNewPath = true;	
 			lerpSpeed = 0.45f;
 			moveSpeed = 2.0f;
 			animationSpeed = 1.0f;
 			animationName = "Walk";
 		}
-		else if(audioSourceRelativeVolume > 19 && audioSourceRelativeVolume < 40)
+		else if(audioSourceRelativeVolume < 40)
 		{
+			Debug.Log("sound < 40");
 			enemyState = EnemyState.searchSlow;
 			lerpSpeed = 0.45f;
 			moveSpeed = 3.0f;
 			animationSpeed = 0.7f;
-			animationName = "Walk";
+			animationName = "Run";
+			BeginLerp();
 		}
-		else if(audioSourceRelativeVolume > 39 && audioSourceRelativeVolume < 60)
+		else if(audioSourceRelativeVolume < 60)
 		{
+			Debug.Log("sound < 60");
 			enemyState = EnemyState.searchFast;
 			lerpSpeed = 0.4f;
 			moveSpeed = 4.0f;
 			animationSpeed = 0.9f;
-			animationName = "Run";
+			animationName = "Run";BeginLerp();
+
 		}
 		/*else if(audioSourceRelativeVolume > 59 && audioSourceRelativeVolume < 80)
 		{
