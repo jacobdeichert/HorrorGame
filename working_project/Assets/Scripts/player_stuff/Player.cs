@@ -8,11 +8,13 @@ public class Player : MonoBehaviour
     private float health;
     private bool isAlive;
     private Camera camera;
+    private Light light;
 
 	void Start () {
         health = 100f;
         isAlive = true;
         camera = GetComponentInChildren<Camera>();
+        light = GetComponentInChildren<Light>();
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
@@ -38,6 +40,16 @@ public class Player : MonoBehaviour
 
 	void Update () {
         updateTorch();
+
+        if (isAlive && health <= 0) {
+            isAlive = false;
+            transform.Rotate(new Vector3(90, 0, 0));
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        if (!isAlive) {
+            StartCoroutine(decreaseLightIntensity(0.5f));
+        }
 	}
 
 
@@ -67,11 +79,14 @@ public class Player : MonoBehaviour
             // calc new x position of health bar fill texture
             float newX = -(guiHealthBarFill.pixelInset.width - guiHealthBarFill.pixelInset.width * (health / 100));
             guiHealthBarFill.pixelInset = new Rect(newX, guiHealthBarFill.pixelInset.y, guiHealthBarFill.pixelInset.width, guiHealthBarFill.pixelInset.height);
-        } else if (isAlive) {
-            isAlive = false;
-            transform.Rotate(new Vector3(90, 0, 0));
-            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        }
+        } 
+    }
+
+
+
+    public IEnumerator decreaseLightIntensity(float repeatRate) {
+        light.intensity -= 0.01f;
+        yield return new WaitForSeconds(repeatRate);
     }
 
 }
