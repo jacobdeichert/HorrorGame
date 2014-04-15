@@ -15,17 +15,20 @@ public class FootstepControl : MonoBehaviour
     {
         if (playerController.rigidbody.velocity.x > 0 || playerController.rigidbody.velocity.z > 0)
         {
-            audio.Play();
+            if (!audio.isPlaying)
+            {
+                audio.Play();
+            }
 
-            Debug.Log("FootStepControl: should make footsteps");
+            //Debug.Log("FootStepControl: should make footsteps");
             // Trying to get footsteps sound to play at different speeds based on movement speed
             // Everything here debugs well enough, but still I hear nothing, maybe because of the ambient sound already playing.
-            /*
+            
             if (playerController.IsRunning)
                 audio.pitch = 2.0f;
             else
                 audio.pitch = 1.0f;
-             */
+             
         }
         else
             audio.Pause();

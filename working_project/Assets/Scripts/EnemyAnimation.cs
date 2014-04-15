@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnemyAnimation : EnemyAI {
-    EnemyAI.EnemyState enemyState;
+    //EnemyAI.EnemyState state;
 	// Use this for initialization
 	void Start () {
         enemyState = EnemyState.wander;
