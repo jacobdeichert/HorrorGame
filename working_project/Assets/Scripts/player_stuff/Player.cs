@@ -9,10 +9,12 @@ public class Player : MonoBehaviour
     private bool isAlive;
     private Camera camera;
     private Light light;
+    private bool reachedEnd;
 
 	void Start () {
         health = 100f;
         isAlive = true;
+        reachedEnd = false;
         camera = GetComponentInChildren<Camera>();
         light = GetComponentInChildren<Light>();
 
@@ -35,7 +37,17 @@ public class Player : MonoBehaviour
         }
         infoText.enabled = false;
 	}
-	
+
+
+    public void OnCollisionEnter(Collision c)
+    {
+        if (c.collider.name == "OuterWall(Clone)")
+        {
+            reachedEnd = true;
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            rigidbody.freezeRotation = true;
+        }
+    }
 
 
 	void Update () {
@@ -49,6 +61,10 @@ public class Player : MonoBehaviour
 
         if (!isAlive) {
             StartCoroutine(decreaseLightIntensity(0.5f));
+        }
+
+        if (reachedEnd) {
+            light.spotAngle += 0.5f;
         }
 	}
 
