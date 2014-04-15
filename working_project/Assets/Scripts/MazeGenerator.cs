@@ -17,7 +17,7 @@ public class MazeGenerator : MonoBehaviour {
    // public GameObject player1;
     public GameObject player2;
 	public GameObject monster;
-    public GameObject ceiling;
+
     public GameObject Floortrap;
     public GameObject Walltrap;
     CrushingWallTrap setWall;
@@ -34,7 +34,6 @@ public class MazeGenerator : MonoBehaviour {
         maze = GenerateMaze(mapheight,mapwidth);
         wall.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         floor.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
-        ceiling.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         end.transform.localScale = new Vector3(1 * wallSize, 1 * wallSize, 1 * wallSize);
         Vector3 Player1pos = new Vector3(1*wallSize,0,1*wallSize);
         Vector3 Player2pos = new Vector3(1 * wallSize, 0, (mapwidth-2) * wallSize);
@@ -92,11 +91,8 @@ public class MazeGenerator : MonoBehaviour {
             for(int j = 0;j<mapwidth;j++)
             {
 
-                Vector3 Floorpos = new Vector3(i * wallSize, 0.0f - (wallSize / 2.0f), j * wallSize);
-                Vector3 FloorTrappos = new Vector3(i * wallSize, 0- wallSize, j * wallSize);
-                Vector3 ceilingPos = new Vector3(i * wallSize, 0.0f + (wallSize / 2.0f), j * wallSize);
-                GameObject Ceiling = Instantiate(ceiling) as GameObject;
-                Ceiling.transform.position = ceilingPos;
+                Vector3 Floorpos = new Vector3(i * wallSize, 0 - wallSize, j * wallSize);
+                
                 //Place floors
                 if (!(maze[i, j] == 1))
                 {
@@ -107,7 +103,7 @@ public class MazeGenerator : MonoBehaviour {
                         {
                             case 1:
                                     GameObject FloorTrap = Instantiate(Floortrap) as GameObject;
-                                    FloorTrap.transform.position = FloorTrappos;
+                                    FloorTrap.transform.position = Floorpos;
                                     break;
                             default:
                                 GameObject Floor = Instantiate(floor) as GameObject;
