@@ -13,11 +13,11 @@ public class FootstepControl : MonoBehaviour
 
 	void Update ()
     {
-        if (playerController.rigidbody.velocity.x != 0 || playerController.rigidbody.velocity.z != 0)
+        if (playerController.rigidbody.velocity.x != 0)
         {
             if (!audio.isPlaying)
             {
-               //audio.Play();
+               audio.Play();
             }
 
             //Debug.Log("FootStepControl: should make footsteps");

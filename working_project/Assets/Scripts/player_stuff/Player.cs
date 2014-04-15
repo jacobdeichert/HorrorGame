@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
 	void Start () {
         health = 100f;
+        isAlive = true;
         camera = GetComponentInChildren<Camera>();
 
         // find the gui health bar
@@ -61,10 +62,16 @@ public class Player : MonoBehaviour
 
 
     public void decreaseHealth(float damageAmount) {
-        health -= damageAmount;
-        // calc new x position of health bar fill texture
-        float newX = -(guiHealthBarFill.pixelInset.width - guiHealthBarFill.pixelInset.width * (health / 100));
-        guiHealthBarFill.pixelInset = new Rect(newX, guiHealthBarFill.pixelInset.y, guiHealthBarFill.pixelInset.width, guiHealthBarFill.pixelInset.height);
+        if (health > 0) {
+            health -= damageAmount;
+            // calc new x position of health bar fill texture
+            float newX = -(guiHealthBarFill.pixelInset.width - guiHealthBarFill.pixelInset.width * (health / 100));
+            guiHealthBarFill.pixelInset = new Rect(newX, guiHealthBarFill.pixelInset.y, guiHealthBarFill.pixelInset.width, guiHealthBarFill.pixelInset.height);
+        } else if (isAlive) {
+            isAlive = false;
+            transform.Rotate(new Vector3(90, 0, 0));
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
     }
 
 }
