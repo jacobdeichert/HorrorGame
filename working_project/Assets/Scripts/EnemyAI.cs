@@ -30,7 +30,10 @@ public class EnemyAI : MonoBehaviour
 
     //lerp things
     Vector2 lerpStart, lerpEnd, lerpDistance;
-    float lerpTime, elapsedTime;
+    float lerpTime, elapsedTime, lerpSpeed = 0.5f;
+	//path target time
+	private const float PATH_RESET_TIME = 5.0f;
+	private float pathReset = 0.0f;
 
 	// DETECTION
 	const float REDIRECTIONRADIUS = 5.0f;
@@ -119,18 +122,23 @@ public class EnemyAI : MonoBehaviour
 		case EnemyState.chaseFast:
 			//if enemy has a target
 			if (playerTarget != null){
+				pathReset += Time.deltaTime;
 				//path towards target player
-				pathFinder.ResetPath(playerTarget.transform.position);
+				if (pathReset > PATH_RESET_TIME){
+					pathFinder.ResetPath(playerTarget.transform.position);
+					pathReset = 0.0f;
+				}
 				//if player gets to far away set to wander
 				if (pathFinder.path.Count > 15){
 					playerTarget = null;
 					enemyState = EnemyState.wander;
 					needNewPath = true;
+					pathReset = 0.0f;
 				}
 				//if enemy in range attack
 				else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5 || pathFinder.path.Count <= 1){
 					enemyState = EnemyState.fight;
-					isAttacking = true;
+					//isAttacking = true;
 				}
 				else{
 					animation.Play("Run");
@@ -194,7 +202,7 @@ public class EnemyAI : MonoBehaviour
 
         lerpDistance = lerpEnd - lerpStart;
 
-        lerpTime = 0.4f;
+        lerpTime = lerpSpeed;
         elapsedTime = 0.0f;
     }
 
@@ -217,20 +225,23 @@ public class EnemyAI : MonoBehaviour
 		// DETERMINE RESPONSE LEVEL
 		if(audioSourceRelativeVolume < 0)
 		{
-			enemyState = EnemyState.idle;
+			/*enemyState = EnemyState.wander;
+			lerpSpeed = 0.5f;
 			moveSpeed = 0.0f;
-			animationSpeed = 1.0f;
+			animationSpeed = 0.5f;*/
 		}
 		else if(audioSourceRelativeVolume > 0 && audioSourceRelativeVolume < 20)
 		{
 			enemyState = EnemyState.wander;
+			lerpSpeed = 0.45f;
 			moveSpeed = 2.0f;
-			animationSpeed = 0.5f;
+			animationSpeed = 1.0f;
 			animationName = "Walk";
 		}
 		else if(audioSourceRelativeVolume > 19 && audioSourceRelativeVolume < 40)
 		{
 			enemyState = EnemyState.searchSlow;
+			lerpSpeed = 0.45f;
 			moveSpeed = 3.0f;
 			animationSpeed = 0.7f;
 			animationName = "Walk";
@@ -238,6 +249,7 @@ public class EnemyAI : MonoBehaviour
 		else if(audioSourceRelativeVolume > 39 && audioSourceRelativeVolume < 60)
 		{
 			enemyState = EnemyState.searchFast;
+			lerpSpeed = 0.4f;
 			moveSpeed = 4.0f;
 			animationSpeed = 0.9f;
 			animationName = "Run";
