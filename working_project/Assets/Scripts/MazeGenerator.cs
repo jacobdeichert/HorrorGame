@@ -149,7 +149,7 @@ public class MazeGenerator : MonoBehaviour {
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
                                     //End position
-                                    GameObject Floor = Instantiate(floor) as GameObject;
+                                    GameObject Floor = Instantiate(end) as GameObject;
                                     Floor.transform.position = Floorpos;
                                     //End.transform.position = new Vector3((mapheight-2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
@@ -167,7 +167,7 @@ public class MazeGenerator : MonoBehaviour {
                                 if (i == mapheight - 2 && j == mapwidth - 1)
                                 {
                                     //End position
-                                    GameObject Floor = Instantiate(floor) as GameObject;
+                                    GameObject Floor = Instantiate(end) as GameObject;
                                     Floor.transform.position = Floorpos;
                                     //End.transform.position = new Vector3((mapheight - 2) * wallSize, 0 - wallSize, (j+1) * wallSize);
                                 }
