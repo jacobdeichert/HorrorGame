@@ -32,7 +32,7 @@ public class EnemyAI : MonoBehaviour
     Vector2 lerpStart, lerpEnd, lerpDistance;
     float lerpTime, elapsedTime, lerpSpeed = 0.5f;
     //path target time
-    private const float PATH_RESET_TIME = 5.0f;
+    private const float PATH_RESET_TIME = 0.5f;
     private float pathReset = 0.0f;
 
     // DETECTION
@@ -66,110 +66,117 @@ public class EnemyAI : MonoBehaviour
         distToTarget = target = Vector3.zero;
     }
 
-    void Update()
-    {
-        switch (enemyState)
-        {
-            case EnemyState.idle: // This may not exist for much longer
-                animation.Play("Idle");
-                if (Input.GetKeyDown(KeyCode.P))
-                    enemyState = EnemyState.wander;
-                break;
-            case EnemyState.wander:
-                animation.Play("Run");
-                if (Input.GetKeyDown(KeyCode.P))
-                    enemyState = EnemyState.idle;
+    void Update(){
+        switch (enemyState){
+	    case EnemyState.idle: // This may not exist for much longer
+	        animation.Play("Idle");
+	        if (Input.GetKeyDown(KeyCode.P))
+	            enemyState = EnemyState.wander;
+	        break;
+	    case EnemyState.wander:
+	        animation.Play("Run");
+	        if (Input.GetKeyDown(KeyCode.P))
+	            enemyState = EnemyState.idle;
 
-                distToTarget = transform.position - target;
+	        distToTarget = transform.position - target;
 
-                if (needNewPath)
-                {
-                    target = Vector3.zero;
+	        if (needNewPath)
+	        {
+	            target = Vector3.zero;
 
-                    while (target == Vector3.zero)
-                    {
-                        int randIndex = Random.Range(0, pathFinder.nodes.Count - 1);
-                        if (!pathFinder.nodes[randIndex].wall)
-                        {
-                            target = pathFinder.nodes[randIndex].transform.position;
-                        }
-                    }
-                    pathFinder.ResetPath(target);
-                    wanderTargetTimer = 0.0f;
-                    BeginLerp();
-                    needNewPath = false;
-                }
+	            while (target == Vector3.zero)
+	            {
+	                int randIndex = Random.Range(0, pathFinder.nodes.Count - 1);
+	                if (!pathFinder.nodes[randIndex].wall)
+	                {
+	                    target = pathFinder.nodes[randIndex].transform.position;
+	                }
+	            }
+	            pathFinder.ResetPath(target);
+	            wanderTargetTimer = 0.0f;
+				//this should fix most of the pathing errors
+				if (pathFinder.path.Count > 0){
+	            	BeginLerp();
+	            	needNewPath = false;
+				}
+	        }
 
-                wanderTargetTimer += Time.deltaTime;
-                Move();
-                //check if any players are visible
-                SearchForPlayers();
+	        wanderTargetTimer += Time.deltaTime;
+			if (!needNewPath){
+	        	Move();
+			}
+	        //check if any players are visible
+	        SearchForPlayers();
 
-                if (wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS)
-                {
-                    //needNewPath = true;
-                }
+	        if (wanderTargetTimer > 30.0f || distToTarget.magnitude < MIN_RANDOM_PATH_DIS)
+	        {
+	            //needNewPath = true;
+	        }
 
-                break;
-            case EnemyState.searchSlow:
-            case EnemyState.searchFast:
-                //if enemy heard a sound
-                Move();
-                SearchForPlayers();
-                animation.CrossFade(animationName);
-                animation[animationName].speed = animationSpeed;
-                //DetermineAttackRange();
-                break;
-            case EnemyState.chaseSlow:
-            case EnemyState.chaseFast:
-                //if enemy has a target
-                if (playerTarget != null)
-                {
-                    pathReset += Time.deltaTime;
-                    //path towards target player
-                    if (pathReset > PATH_RESET_TIME)
-                    {
-                        pathFinder.ResetPath(playerTarget.transform.position);
-                        pathReset = 0.0f;
-                    }
-                    //if player gets to far away set to wander
-                    if (pathFinder.path.Count > 15)
-                    {
-                        playerTarget = null;
-                        enemyState = EnemyState.wander;
-                        needNewPath = true;
-                        pathReset = 0.0f;
-                    }
-                    //if enemy in range attack
-                    else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5)
-                    {
-                        enemyState = EnemyState.fight;
-                        //isAttacking = true;
-                    }
-                    else
-                    {
-                        animation.Play("Run");
-                        Move();
-                    }
-                }
-                //if playerTarget is for some reason null start to wander
-                else
-                {
-                    enemyState = EnemyState.wander;
-                    needNewPath = true;
-                }
-                break;
-            case EnemyState.fight:
-                //DetermineAttackRange();
-                animation.CrossFade("Slam");
-                if (Vector3.Distance(transform.position, playerTarget.transform.position) < 5)
-                {
-                    enemyState = EnemyState.chaseFast;
-                }
-                break;
-            case EnemyState.dead:
-                // StartCoroutine("EnemyDeath");
-                break;
+	        break;
+	    case EnemyState.searchSlow:
+	    case EnemyState.searchFast:
+	        //if enemy heard a sound
+	        Move();
+	        SearchForPlayers();
+	        animation.CrossFade(animationName);
+	        animation[animationName].speed = animationSpeed;
+	        //DetermineAttackRange();
+	        break;
+	    case EnemyState.chaseSlow:
+	    case EnemyState.chaseFast:
+	        //if enemy has a target
+	        if (playerTarget != null)
+	        {
+	            pathReset += Time.deltaTime;
+	            //path towards target player
+	            if (pathReset >= PATH_RESET_TIME)
+	            {
+	                pathFinder.ResetPath(playerTarget.transform.position);
+	                pathReset = 0.0f;
+	            }
+	            //if player gets to far away set to wander
+	            if (pathFinder.path.Count > 15)
+	            {
+	                playerTarget = null;
+	                enemyState = EnemyState.wander;
+	                needNewPath = true;
+	                pathReset = 0.0f;
+	            }
+	            //if enemy in range attack
+	            else if (Vector3.Distance(transform.position, playerTarget.transform.position) < 3)
+	            {
+	                enemyState = EnemyState.fight;
+	                //isAttacking = true;
+	            }
+	            else
+	            {
+	                animation.Play("Run");
+	                Move();
+	            }
+	        }
+	        //if playerTarget is for some reason null start to wander
+	        else
+	        {
+	            enemyState = EnemyState.wander;
+	            needNewPath = true;
+	        }
+	        break;
+	    case EnemyState.fight:
+	        //DetermineAttackRange();
+			transform.LookAt(playerTarget.transform);
+	        animation.CrossFade("Slam");
+	        if (Vector3.Distance(transform.position, playerTarget.transform.position) > 4)
+	        {
+	            enemyState = EnemyState.chaseFast;
+	        }
+			if (!playerTarget.GetComponent<Player>().IsAlive()){
+				enemyState = EnemyState.idle;
+			}
+	        break;
+	    case EnemyState.dead:
+	        // StartCoroutine("EnemyDeath");
+	        break;
         }
     }
 
@@ -377,6 +384,7 @@ public class EnemyAI : MonoBehaviour
                         Debug.Log("player targeted.");
                         playerTarget = player.gameObject;
                         enemyState = EnemyState.chaseFast;
+						pathReset = PATH_RESET_TIME;
                         //for now break, but we may have to take into account both players at once
                         break;
                     }

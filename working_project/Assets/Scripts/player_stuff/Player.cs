@@ -38,6 +38,10 @@ public class Player : MonoBehaviour
         infoText.enabled = false;
 	}
 
+	public bool IsAlive(){
+		return isAlive;
+	}
+
 
     public void OnCollisionEnter(Collision c)
     {

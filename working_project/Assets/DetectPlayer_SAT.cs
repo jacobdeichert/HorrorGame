@@ -172,9 +172,9 @@ public class DetectPlayer_SAT : MonoBehaviour
             }
         }
 
-        if (isNotColliding)
+        /*if (isNotColliding)
             Debug.Log("Player is not at the exit");
         else
-            Debug.Log("Player is at the exit");
+            Debug.Log("Player is at the exit");*/
 	}
 }
