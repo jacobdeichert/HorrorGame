@@ -6,16 +6,18 @@ public class ArrowWallTrap : Trap {
 
     //public GameObject[] SpawnPoint; 
     float y = 0;
-    float time = 0;
+    float time ;
     float Amplitude = 3;
-    float Velocity = 0;
-    float accleration = 0.0f;
-    float frequecy = 0.0f;
-    float Period = 0.0f;
-    float Omega = 3.0f;
-    float phaseAngle = 0.0f;
+    float Velocity;
+    float accleration;
+    float frequecy ;
+    float Period ;
+    float Omega ;
+    float phaseAngle;
+    float sine;
+    float totalsine;
     public Rigidbody bullet;
-    public Transform[] bulletobj;
+    public Transform[] bulletobj = new Transform[6];
     void Start() {
    
        
@@ -28,7 +30,8 @@ public class ArrowWallTrap : Trap {
 	void Update() {
         if (state == TrapState.BEGUN && !hasInvokedEnd) {
             hasInvokedEnd = true;
-            bulletobj = new Transform[6];
+             
+     
            Invoke("end", 10f);
         }
 	}
@@ -70,36 +73,47 @@ public class ArrowWallTrap : Trap {
            
             base.begin();
           //  SpawnPoint = new GameObject[6];
-
-            FixedUpdate();
-            Debug.Log(y);
-            if (y == 2.0f || y <= 2.9f)
+            if (totalsine == 2.0f || totalsine <= 2.9f)
             {
-             Rigidbody arrow =  Instantiate(bullet, bulletobj[0].transform.position, Quaternion.identity) as Rigidbody;
-             arrow.AddRelativeForce(bulletobj[0].transform.position);
-            } else if (y == 1.0f || y <= 1.9f)
+                Rigidbody arrow = Instantiate(bullet, bulletobj[0].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[0].transform.position);
+                y -= y;
+                Debug.Log(y);
+            }
+            else if (totalsine == 1.0f || totalsine <= 1.9f)
             {
-             Rigidbody arrow =  Instantiate(bullet, bulletobj[1].transform.position, Quaternion.identity) as Rigidbody;
-             arrow.AddRelativeForce(bulletobj[1].transform.position);
-            }else if (y == 0.0f || y <= 0.9)
+                Rigidbody arrow = Instantiate(bullet, bulletobj[1].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[1].transform.position);
+                Debug.Log(y);
+            }
+            else if (totalsine == 0.0f || totalsine <= 0.9)
             {
-               Rigidbody arrow = Instantiate(bullet, bulletobj[2].transform.position, Quaternion.identity) as Rigidbody;
-               arrow.AddRelativeForce(bulletobj[2].transform.position);
-            }else if (y == -0.1f || y <= -0.9f)
+                Rigidbody arrow = Instantiate(bullet, bulletobj[2].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[2].transform.position);
+                Debug.Log(y);
+            }
+            else if (totalsine == -0.1f || totalsine <= -0.9f)
             {
                 Rigidbody arrow = Instantiate(bullet, bulletobj[3].transform.position, Quaternion.identity) as Rigidbody;
                 arrow.AddRelativeForce(bulletobj[3].transform.position);
-            }else if (y == -1.0 || y <= -1.9 )
+            }
+            else if (totalsine == -1.0 || totalsine <= -1.9)
             {
                 Rigidbody arrow = Instantiate(bullet, bulletobj[4].transform.position, Quaternion.identity) as Rigidbody;
                 arrow.AddRelativeForce(bulletobj[4].transform.position);
-            }else if (y == -2.0 || y <= -2.9)
+            }
+            else if (y == -2.0 || y <= -2.9)
             {
                 Rigidbody arrow = Instantiate(bullet, bulletobj[5].transform.position, Quaternion.identity) as Rigidbody;
                 arrow.AddRelativeForce(bulletobj[5].transform.position);
-            }else if (y == -3) { }
+            }
+            else if (y == -3) { }
             {
+               
             } 
+            
+            Debug.Log(y);
+          
 		}
 	}
 
@@ -113,15 +127,23 @@ public class ArrowWallTrap : Trap {
 	}
    public void FixedUpdate()
    {
-       y = 0;
-       time += Time.deltaTime;
-       Period = 2.0f * 3.14f / Omega;
-       frequecy = 1 / Period;
-       y += Amplitude * Mathf.Sin(Omega * time + phaseAngle);
-       Velocity += Omega * Amplitude * Mathf.Cos(Omega * time + phaseAngle);
-       accleration += -Omega * Omega * y;
-     
-       //Debug.Log(y);
+       
+       if (state == TrapState.BEGUN)
+       {
+           float sine = Mathf.Sin(Period * time + phaseAngle ) * Amplitude;
+           float totalsine = sine + sine;
+           time += Time.deltaTime;
+           Omega = 2.0f * 3.14f / time;
+          // phaseAngle = 1;
+           Period = 2.0f * 3.14f / Omega;
+           frequecy = 1 / Period;
+         
+           Debug.Log(totalsine);
+       }
+       if (state == TrapState.ENDED) 
+       {
+        
+       }    
    }
    
 }
