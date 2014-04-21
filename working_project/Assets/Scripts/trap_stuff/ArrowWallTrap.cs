@@ -4,7 +4,8 @@ using System.Collections;
 public class ArrowWallTrap : Trap {
 
 
-    public GameObject[] SpawnPoint; float y = 0;
+    //public GameObject[] SpawnPoint; 
+    float y = 0;
     float time = 0;
     float Amplitude = 3;
     float Velocity = 0;
@@ -13,7 +14,8 @@ public class ArrowWallTrap : Trap {
     float Period = 0.0f;
     float Omega = 3.0f;
     float phaseAngle = 0.0f;
-    public Transform bulletobj;
+    public Rigidbody bullet;
+    public Transform[] bulletobj;
     void Start() {
    
        
@@ -26,6 +28,7 @@ public class ArrowWallTrap : Trap {
 	void Update() {
         if (state == TrapState.BEGUN && !hasInvokedEnd) {
             hasInvokedEnd = true;
+            bulletobj = new Transform[6];
            Invoke("end", 10f);
         }
 	}
@@ -66,34 +69,37 @@ public class ArrowWallTrap : Trap {
 		if (state == TrapState.IDLE && isActivated) {
            
             base.begin();
-            SpawnPoint = new GameObject[6];
-            time += Time.deltaTime;
-            Period = 2.0f * 3.14f / Omega;
-            frequecy = 1 / Period;
-            y += Amplitude * Mathf.Sin(Omega * time + phaseAngle);
-            Velocity += Omega * Amplitude * Mathf.Cos(Omega * time + phaseAngle);
-            accleration += -Omega * Omega * y; 
-            if (y == 3)
+          //  SpawnPoint = new GameObject[6];
+
+            FixedUpdate();
+            Debug.Log(y);
+            if (y == 2.0f || y <= 2.9f)
             {
-                Instantiate(bulletobj, SpawnPoint[0].transform.position, Quaternion.identity);
-            } if (y == 2)
+             Rigidbody arrow =  Instantiate(bullet, bulletobj[0].transform.position, Quaternion.identity) as Rigidbody;
+             arrow.AddRelativeForce(bulletobj[0].transform.position);
+            } else if (y == 1.0f || y <= 1.9f)
             {
-                Instantiate(bulletobj, SpawnPoint[1].transform.position, Quaternion.identity);
-            } if (y == 1)
+             Rigidbody arrow =  Instantiate(bullet, bulletobj[1].transform.position, Quaternion.identity) as Rigidbody;
+             arrow.AddRelativeForce(bulletobj[1].transform.position);
+            }else if (y == 0.0f || y <= 0.9)
             {
-                Instantiate(bulletobj, SpawnPoint[2].transform.position, Quaternion.identity);
-            } if (y == 0)
+               Rigidbody arrow = Instantiate(bullet, bulletobj[2].transform.position, Quaternion.identity) as Rigidbody;
+               arrow.AddRelativeForce(bulletobj[2].transform.position);
+            }else if (y == -0.1f || y <= -0.9f)
             {
-                Instantiate(bulletobj, SpawnPoint[3].transform.position, Quaternion.identity);
-            } if (y == -1)
+                Rigidbody arrow = Instantiate(bullet, bulletobj[3].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[3].transform.position);
+            }else if (y == -1.0 || y <= -1.9 )
             {
-                Instantiate(bulletobj, SpawnPoint[4].transform.position, Quaternion.identity);
-            } if (y == -2)
+                Rigidbody arrow = Instantiate(bullet, bulletobj[4].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[4].transform.position);
+            }else if (y == -2.0 || y <= -2.9)
             {
-                Instantiate(bulletobj, SpawnPoint[5].transform.position, Quaternion.identity);
-            } if (y == -3) { }
+                Rigidbody arrow = Instantiate(bullet, bulletobj[5].transform.position, Quaternion.identity) as Rigidbody;
+                arrow.AddRelativeForce(bulletobj[5].transform.position);
+            }else if (y == -3) { }
             {
-            }
+            } 
 		}
 	}
 
@@ -105,33 +111,19 @@ public class ArrowWallTrap : Trap {
 		    
         }
 	}
+   public void FixedUpdate()
+   {
+       y = 0;
+       time += Time.deltaTime;
+       Period = 2.0f * 3.14f / Omega;
+       frequecy = 1 / Period;
+       y += Amplitude * Mathf.Sin(Omega * time + phaseAngle);
+       Velocity += Omega * Amplitude * Mathf.Cos(Omega * time + phaseAngle);
+       accleration += -Omega * Omega * y;
+     
+       //Debug.Log(y);
+   }
    
-   public void FixedUpdate() 
-    {
-         
-       
-       if (y == 3)
-        {
-            Instantiate(bulletobj, SpawnPoint[0].transform.position, Quaternion.identity);
-        } if (y == 2)
-        {
-            Instantiate(bulletobj, SpawnPoint[1].transform.position, Quaternion.identity);
-        } if (y == 1)
-        {
-            Instantiate(bulletobj, SpawnPoint[2].transform.position, Quaternion.identity);
-        } if (y == 0)
-        {
-            Instantiate(bulletobj, SpawnPoint[3].transform.position, Quaternion.identity);
-        } if (y == -1)
-        {
-            Instantiate(bulletobj, SpawnPoint[4].transform.position, Quaternion.identity);
-        } if (y == -2)
-        {
-            Instantiate(bulletobj, SpawnPoint[5].transform.position, Quaternion.identity);
-        } if (y == -3) { }
-        {
-        }
-    }
 }
 
 
