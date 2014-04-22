@@ -12,7 +12,7 @@ public class DetectPlayer_SAT : MonoBehaviour
     const int SQ_TILE = 0;
     const int SQ_PLAYER = 1;
     ProjPoints[] projPoints = new ProjPoints[VERTS_PER_SHAPE];
-    bool isNotColliding = false;
+    public bool isNotColliding = false;
 
     MeshFilter filter;
     Vector2 normal;

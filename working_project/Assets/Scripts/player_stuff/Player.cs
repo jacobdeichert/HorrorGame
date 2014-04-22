@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     private Camera camera;
     private Light light;
     private bool reachedEnd;
+    private DetectPlayer_SAT satEndTile;
 
 	void Start () {
         health = 100f;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
         reachedEnd = false;
         camera = GetComponentInChildren<Camera>();
         light = GetComponentInChildren<Light>();
+        satEndTile = FindObjectOfType<DetectPlayer_SAT>();
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
@@ -45,7 +47,8 @@ public class Player : MonoBehaviour
 
     public void OnCollisionEnter(Collision c)
     {
-        if (c.collider.name == "OuterWall(Clone)")
+        // if the player touches the white wall or the end tile detects the player with SAT
+        if (c.collider.name == "OuterWall(Clone)" || !satEndTile.isNotColliding)
         {
             reachedEnd = true;
             rigidbody.constraints = RigidbodyConstraints.FreezeAll;
