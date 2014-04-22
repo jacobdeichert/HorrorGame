@@ -17,7 +17,7 @@ public class TrapDamage : MonoBehaviour {
     public void OnCollisionEnter(Collision c) {
         // touching player
         Player testPlayer;
-        if ((testPlayer = c.contacts[0].otherCollider.GetComponent<Player>() as Player) != null) {
+        if ((testPlayer = c.contacts[0].otherCollider.transform.root.GetComponent<Player>() as Player) != null) {
             playerToDamage = testPlayer;
             if (!isTouchingPlayer) {
                 isTouchingPlayer = true;
@@ -29,7 +29,7 @@ public class TrapDamage : MonoBehaviour {
 
     void OnCollisionExit(Collision c) {
         // stopped touching player
-        if ((Player)(c.contacts[0].otherCollider.GetComponent<Player>())) {
+        if ((Player)(c.contacts[0].otherCollider.transform.root.GetComponent<Player>())) {
             isTouchingPlayer = false;
         }
     }
