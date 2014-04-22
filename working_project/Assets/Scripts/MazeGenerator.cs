@@ -142,6 +142,11 @@ public class MazeGenerator : MonoBehaviour {
                                     GameObject Wall = Instantiate(wall) as GameObject;
                                     Wall.transform.position = pos;
 
+                                    // rotate walls randomly during generation to make torches
+                                    // appear more often
+                                    int randomRotation = Random.Range(0, 2);
+                                    if (randomRotation == 0) Wall.transform.Rotate(0, 90, 0); 
+
                                 }
                                 else
                                 {
@@ -182,6 +187,10 @@ public class MazeGenerator : MonoBehaviour {
                                 {
                                     GameObject Wall = Instantiate(wall) as GameObject;
                                     Wall.transform.position = pos;
+                                    // rotate walls randomly during generation to make torches
+                                    // appear more often
+                                    int randomRotation = Random.Range(0, 2);
+                                    if (randomRotation == 0) Wall.transform.Rotate(0, 90, 0); 
                                 }
                                
                                 break;
