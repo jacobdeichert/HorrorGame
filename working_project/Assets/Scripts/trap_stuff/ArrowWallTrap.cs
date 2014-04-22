@@ -79,7 +79,7 @@ public class ArrowWallTrap : Trap {
             for(int i = 0; i < 6; i ++)
             {
 
-          b[i] =   Instantiate(bullet[i], bulletobj[i].position, Quaternion.identity) as GameObject;
+          b[i] =   Instantiate(bullet[i], bulletobj[i].position, bulletobj[i].rotation) as GameObject;
             
             }
            Debug.Log("Started");
