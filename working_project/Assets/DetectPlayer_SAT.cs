@@ -85,12 +85,10 @@ public class DetectPlayer_SAT : MonoBehaviour
 	void Update ()
     {
         // To see tile vertices & normals
-        /*
         for (int i = 0; i < endTileVertPositions.Length; i++)
             Debug.DrawRay(new Vector3(endTileVertPositions[i].x, -2.5f, endTileVertPositions[i].y), Vector3.up, Color.red, 0.01f);
         for (int i = 0; i < tileVertNormals.Length; i++)
             Debug.DrawRay(transform.position, new Vector3(tileVertNormals[i].x, 0, tileVertNormals[i].y), Color.green, 0.01f);
-        */
 
         // need to constantly update as player moves
         centre = player.collider.bounds.center;
@@ -101,7 +99,7 @@ public class DetectPlayer_SAT : MonoBehaviour
         for (int i = 0; i < playerColliderVertPositions.Length; i++)
         {
             playerColliderVertPositions[i].Set(centre.x + (colliderMagnitude * Mathf.Sin((eulerRotation + vertAngles[i]) * (Mathf.PI / 180))), centre.z + (colliderMagnitude * Mathf.Cos((eulerRotation + vertAngles[i]) * (Mathf.PI / 180))));
-            //Debug.DrawRay(new Vector3(playerColliderVertPositions[i].x, -2.5f, playerColliderVertPositions[i].y), Vector3.up, Color.red, 0.01f);
+            Debug.DrawRay(new Vector3(playerColliderVertPositions[i].x, -2.5f, playerColliderVertPositions[i].y), Vector3.up, Color.red, 0.01f);
         }
         //Debug.Log(playerColliderVertPositions[0] + ", " + playerColliderVertPositions[1] + ", " + playerColliderVertPositions[2] + ", " + playerColliderVertPositions[3]);
 
@@ -109,7 +107,7 @@ public class DetectPlayer_SAT : MonoBehaviour
         {
             playerColliderNormals[i] = playerColliderVertPositions[i] - playerColliderVertPositions[i + 1];
             playerColliderNormals[i].Normalize();
-            //Debug.DrawRay(centre, new Vector3(playerColliderNormals[i].x, 0, playerColliderNormals[i].y), Color.green, 0.01f);
+            Debug.DrawRay(centre, new Vector3(playerColliderNormals[i].x, 0, playerColliderNormals[i].y), Color.green, 0.01f);
         }
         //Debug.Log(playerColliderNormals[0] + ", " + playerColliderNormals[1]);
 
