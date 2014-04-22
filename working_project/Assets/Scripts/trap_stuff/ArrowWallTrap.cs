@@ -42,13 +42,13 @@ public class ArrowWallTrap : Trap {
 
     public override void correctRotation() {
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(transform.position, transform.right);
         bool hasHitSomething = Physics.Raycast(ray, out hit, 2.0f);
         int testCount = 4;
 
         while (hasHitSomething) {
             gameObject.transform.parent.gameObject.transform.Rotate(0, 90, 0);
-            ray = new Ray(transform.position, transform.forward);
+            ray = new Ray(transform.position, transform.right);
             hasHitSomething = Physics.Raycast(ray, out hit, 2.0f);
 
             // stop the loop after 4 tries (trap is blocked on all sides)
