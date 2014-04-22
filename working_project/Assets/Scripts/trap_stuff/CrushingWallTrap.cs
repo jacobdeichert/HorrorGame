@@ -8,7 +8,7 @@ public class CrushingWallTrap : Trap
     private Vector3 accel = Vector3.zero;
     private float mass = 1f;
     private float restLengthOfString = 1f;
-    private float springStiffnessConstant = 29f;
+    private float springStiffnessConstant = 23f;
     private Vector3 deltaPosition = Vector3.zero;
     public Transform fixedObject;
 
@@ -23,7 +23,7 @@ public class CrushingWallTrap : Trap
         // if the trap has been triggered, apply the spring translation
         if (state == TrapState.BEGUN)
         {
-            force.z = 100f;
+            force.z = 80f;
             force += getSimpleSpringForce();
             accel = force / mass;
             deltaPosition = deltaPosition + ((accel / 2) * Mathf.Pow(Time.deltaTime, 2));
