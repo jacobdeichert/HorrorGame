@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PendulumTrap : Trap {
 	
-	private float W = Mathf.Sqrt(9.8f / 1.5f);
+	private float W = Mathf.Sqrt(9.8f / 2.0f);
 	private float D = Mathf.PI / 2;
 	private float MAX_ANGLE;// = transform.rotation.z * Mathf.PI / 180;
 	private float angle;
