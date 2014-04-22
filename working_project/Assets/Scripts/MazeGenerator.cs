@@ -18,8 +18,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject player2;
 	public GameObject monster;
     public GameObject ceiling;
-    public GameObject Floortrap;
-    public GameObject Walltrap;
+    //public GameObject Floortrap;
+    //public GameObject Walltrap;
     CrushingWallTrap setWall;
     public GameObject Outerwallx;
     public GameObject Outerwallz;
@@ -28,6 +28,11 @@ public class MazeGenerator : MonoBehaviour {
     public bool hasCeiling = true;
 
 	private bool isSpawned;
+
+
+    // new trap spawning
+    public GameObject[] wallTraps;
+    public GameObject[] floorTraps;
 
 	// Use this for initialization
 	void Start () {
@@ -106,9 +111,10 @@ public class MazeGenerator : MonoBehaviour {
                         switch (Random.Range(0,20))
                         {
                             case 1:
-                                    GameObject FloorTrap = Instantiate(Floortrap) as GameObject;
-                                    FloorTrap.transform.position = FloorTrappos;
-                                    break;
+                                GameObject randomTrap = floorTraps[Random.Range(0, floorTraps.Length)];
+                                GameObject FloorTrap = Instantiate(randomTrap) as GameObject;
+                                FloorTrap.transform.position = FloorTrappos;
+                                break;
                             default:
                                 GameObject Floor = Instantiate(floor) as GameObject;
                                 Floor.transform.position = Floorpos;
@@ -155,7 +161,8 @@ public class MazeGenerator : MonoBehaviour {
                                 }
                                 else
                                 {
-                                    GameObject WallTrap = Instantiate(Walltrap) as GameObject;
+                                    GameObject randomTrap = wallTraps[Random.Range(0, wallTraps.Length)];
+                                    GameObject WallTrap = Instantiate(randomTrap) as GameObject;
                                     
                                     WallTrap.transform.position = pos;
                                 }
