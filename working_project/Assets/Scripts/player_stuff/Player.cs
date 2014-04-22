@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private Light light;
     private bool reachedEnd;
     private DetectPlayer_SAT satEndTile;
+    private GameObject endWhiteCube;
 
 	void Start () {
         health = 100f;
@@ -50,11 +51,20 @@ public class Player : MonoBehaviour
         // if the player touches the white wall or the end tile detects the player with SAT
         if (c.collider.name == "OuterWall(Clone)" || !satEndTile.isNotColliding)
         {
-            reachedEnd = true;
+            if (!reachedEnd) {
+                endWhiteCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                endWhiteCube.transform.position = transform.position + new Vector3(0, 0, 2.1f);
+                endWhiteCube.transform.rotation = new Quaternion(0, -45f, 0, 1);
+                endWhiteCube.transform.localScale = new Vector3(8f, 10f, 3f);
+                endWhiteCube.transform.parent = transform;
+                endWhiteCube.collider.enabled = false;
+                reachedEnd = true;
+            }
             rigidbody.constraints = RigidbodyConstraints.FreezeAll;
             rigidbody.freezeRotation = true;
         }
     }
+
 
 
 	void Update () {
@@ -72,6 +82,7 @@ public class Player : MonoBehaviour
 
         if (reachedEnd) {
             light.spotAngle += 0.5f;
+            light.intensity += 0.1f;
         }
 	}
 
