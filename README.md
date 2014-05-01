@@ -1,35 +1,34 @@
-# README!!!
+TerrOut Horror Game Project
+===========================
+
+Check out the development branch for the actual game.
+
+You are dropped into a maze and must escape before you die. To escape, find the white wall and step towards it (the end). There's a monster in the maze that follows noise based on loudness. Mazes are randomly generated, so good luck in finding the exit. Don't stand still for too long, the monster is fast and will find you. You can sprint faster than him though.
 
 
+Controls
+--------
+### Keyboard
+WASD: move
+Space: jump
+Shift: sprint
+Left Click: turn torch on/off
+ESC: back to main menu
 
-### github for windows
+### Callouts (only with keyboard)
+Press Enter to bring up the chat box. Type in one of the commands listed below to make that callout. We originally had these callouts for if there was 2 players in the game.. it was going to be a multiplayer game, but we ran out of time. You'll notice that there is up/down voice volume buttons, again these were for multiplayer purposes, however the louder your voice volume is, the more likely the monster will hear it.
+- run away
+- over here
+- watch out
+- help
 
-If you don't like SourceTree, check out [**GitHub for Windows**](http://windows.github.com). It's extremely simple and should make things a lot less confusing for this project.
+### Gamepad (main menu)
+A: play game
+Back: quit
 
-
-
-### development branch created
-
-I created a branch called **development** as Taso suggested. For now, I guess we should keep the **master** branch clean. You will notice the **master** branch is the only branch with this **README** file. The **master** branch also contains a **docs** folder which could be useful to store important documents.
-
-I thought it might be useful to create a **CHANGELOG** file so that each of us can describe what changes we make in each push. This file is located only in the **development** branch. You will also notice a **unity_example_project** folder which holds a basic example project. At the moment, I have a folder called **jake** to keep my stuff in. Create your own folder for your stuff.
-
-
-
-### students get 5 free private repos
-
-If you would like to get 5 free private repos, you just have to give github your humber email address and you might have to send them a short message about what you would use it for. I did it over a year ago, but I think I went here **https://github.com/edu** and clicked on **Request a Discount**... then follow the instructions from there.
-
-
-
-### tips
-
-- make sure not to delete the **.gitignore** file in each branch
-- apparently github can't combine unity **.scene** files, therefore, more than one person can't work on the same scene
-
-
-
-### git questions or problems?
-
-I've been using git and github for almost 2 years now, hopefully I can help if anyone has any questions or problems.
-
+### Gamepad (maze)
+Sticks: move
+A: jump
+Left Stick Press: sprint
+X: turn torch on/off
+Back: back to main menu
