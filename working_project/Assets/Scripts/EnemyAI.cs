@@ -80,11 +80,11 @@ public class EnemyAI : MonoBehaviour
 
 	        distToTarget = transform.position - target;
 
-	        if (needNewPath)
+	        if (needNewPath && pathFinder.nodes.Count > 0)
 	        {
 	            target = Vector3.zero;
 
-	            while (target == Vector3.zero)
+                while (target == Vector3.zero)
 	            {
 	                int randIndex = Random.Range(0, pathFinder.nodes.Count - 1);
 	                if (!pathFinder.nodes[randIndex].wall)

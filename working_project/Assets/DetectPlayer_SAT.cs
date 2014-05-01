@@ -32,7 +32,7 @@ public class DetectPlayer_SAT : MonoBehaviour
 
 	void Start ()
     {
-        Debug.Log(transform.position);
+        //Debug.Log(transform.position);
 
         //////////////////////////////////////////////  get end tile verts
 
@@ -48,14 +48,14 @@ public class DetectPlayer_SAT : MonoBehaviour
         endTileVertPositions[2] = new Vector2(meshVerts.x, meshVerts.z);
         meshVerts = transform.TransformPoint(filter.mesh.vertices[3]);
         endTileVertPositions[3] = new Vector2(meshVerts.x, meshVerts.z);
-        Debug.Log(endTileVertPositions[0] + ", " + endTileVertPositions[1] + ", " + endTileVertPositions[2] + ", " + endTileVertPositions[3]);
+        //Debug.Log(endTileVertPositions[0] + ", " + endTileVertPositions[1] + ", " + endTileVertPositions[2] + ", " + endTileVertPositions[3]);
         // Calcutae normals (only 2 needed for squares, and without needed to use negative reciprocals)
         for (int i = 0; i < tileVertNormals.Length; i++)
         {
             tileVertNormals[i] = endTileVertPositions[i] - endTileVertPositions[i+1];
             tileVertNormals[i].Normalize();
         }
-        Debug.Log(tileVertNormals[0] + ", " + tileVertNormals[1]);
+        //Debug.Log(tileVertNormals[0] + ", " + tileVertNormals[1]);
 
         //////////////////////////////////////////////  Find collision box verts
 

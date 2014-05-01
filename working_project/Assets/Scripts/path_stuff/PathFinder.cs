@@ -8,12 +8,22 @@ public class PathFinder : MonoBehaviour
 	public List<Node> path = new List<Node>();
 	Node startNode;
 	Node endNode;
+    bool hasFoundNodes = false;
 
 	void Start () 
 	{
-		foreach (Node node in GameObject.FindObjectsOfType<Node>())
-			nodes.Add(node);
+		
 	}
+
+    void Update()
+    {
+        if (!hasFoundNodes && GameObject.FindObjectsOfType<Node>().Length != 0)
+        {
+            hasFoundNodes = true;
+            foreach (Node node in GameObject.FindObjectsOfType<Node>())
+			    nodes.Add(node);
+        }
+    }
 
 	public void ResetPath(Vector3 sourcePos)
 	{

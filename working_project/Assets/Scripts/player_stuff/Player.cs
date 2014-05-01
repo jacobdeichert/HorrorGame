@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private bool reachedEnd;
     private DetectPlayer_SAT satEndTile;
     private GameObject endWhiteCube;
+    private bool foundEndTile = false;
 
 	void Start () {
         health = 100f;
@@ -19,7 +20,6 @@ public class Player : MonoBehaviour
         reachedEnd = false;
         camera = GetComponentInChildren<Camera>();
         light = GetComponentInChildren<Light>();
-        satEndTile = FindObjectOfType<DetectPlayer_SAT>();
 
         // find the gui health bar
         GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     public void OnCollisionEnter(Collision c)
     {
         // if the player touches the white wall or the end tile detects the player with SAT
-        if (c.collider.name == "OuterWall(Clone)" || !satEndTile.isNotColliding)
+        if (c.collider.name == "OuterWall(Clone)" || (foundEndTile && !satEndTile.isNotColliding))
         {
             if (!reachedEnd) {
                 endWhiteCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -68,6 +68,18 @@ public class Player : MonoBehaviour
 
 
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.LoadLevel("MainMenu");
+        }
+
+
+        if (!foundEndTile && FindObjectOfType<DetectPlayer_SAT>() != null)
+        {
+            foundEndTile = true;
+            satEndTile = FindObjectOfType<DetectPlayer_SAT>();
+        }
+
+
         updateTorch();
 
         if (isAlive && health <= 0) {

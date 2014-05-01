@@ -82,7 +82,6 @@ public class ArrowWallTrap : Trap {
           b[i] =   Instantiate(bullet[i], bulletobj[i].position, bulletobj[i].rotation) as GameObject;
             
             }
-           Debug.Log("Started");
         
           
 		}
@@ -117,7 +116,6 @@ public class ArrowWallTrap : Trap {
            for(int i = 0;i< 6; i++){
            b[i].transform.Translate(0.025f, totalsine*frequecy , 0);
            }
-               Debug.Log(totalsine);
        }
        if (state == TrapState.ENDED) 
        {
