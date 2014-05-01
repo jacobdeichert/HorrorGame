@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		
         // check if the player stops running
-		if (Input.GetKeyUp(KeyCode.LeftShift)) {
+		if (Input.GetButtonUp("Sprint")) {
 			isRunning = false;
 		}
 	}
