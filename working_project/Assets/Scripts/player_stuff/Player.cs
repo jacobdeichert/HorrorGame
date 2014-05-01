@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private bool foundEndTile = false;
 
 	void Start () {
+        Screen.showCursor = false;
+        Screen.lockCursor = true;
         health = 100f;
         isAlive = true;
         reachedEnd = false;
@@ -68,7 +70,7 @@ public class Player : MonoBehaviour
 
 
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetButton("Back")) {
             Application.LoadLevel("MainMenu");
         }
 
