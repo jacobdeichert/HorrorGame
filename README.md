@@ -14,6 +14,8 @@ Controls
 - Shift: sprint
 - Left Click: turn torch on/off
 - ESC: back to main menu
+- Plus Symbol (+): increase callout volume
+- Minus Symbol (-): decrease callout volume
 
 ### Callouts (only with keyboard)
 Press Enter to bring up the chat box. Type in one of the commands listed below to make that callout. We originally had these callouts for if there was 2 players in the game.. it was going to be a multiplayer game, but we ran out of time. You'll notice that there is up/down voice volume buttons, again these were for multiplayer purposes, however the louder your voice volume is, the more likely the monster will hear it.
